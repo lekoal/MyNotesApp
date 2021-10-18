@@ -76,9 +76,6 @@ public class NotesFragment extends Fragment implements NotesListView {
             TextView noteTime = itemView.findViewById(R.id.note_time);
             noteTime.setText(note.getTime());
 
-            TextView noteContent = itemView.findViewById(R.id.note_content);
-            noteContent.setText(note.getContent());
-
             notesListRoot.addView(itemView);
         }
     }
