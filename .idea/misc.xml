@@ -3,8 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/coreglus/AndroidStudioProjects/MyNotesApp/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/coreglus/AndroidStudioProjects/MyNotesApp/app/src/main/res/layout/fragment_notes.xml" value="0.36666666666666664" />
+        <entry key="..\:/android/MyNotesApp/app/src/main/res/layout-land/activity_main.xml" value="0.1" />
+        <entry key="..\:/android/MyNotesApp/app/src/main/res/layout/activity_main.xml" value="0.20416666666666666" />
+        <entry key="..\:/android/MyNotesApp/app/src/main/res/layout/fragment_note_details.xml" value="0.20416666666666666" />
+        <entry key="..\:/android/MyNotesApp/app/src/main/res/layout/fragment_notes.xml" value="0.20416666666666666" />
+        <entry key="..\:/android/MyNotesApp/app/src/main/res/layout/item_note.xml" value="0.1" />
       </map>
     </option>
   </component>

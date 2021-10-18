@@ -1,10 +1,13 @@
-package com.example.mynotesapp;
+package com.example.mynotesapp.domain;
+
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class Note {
+public class Note implements Parcelable {
     private String title;
     private String content;
     private String date;
@@ -19,6 +22,25 @@ public class Note {
         this.date = formatForDateNow.format(dateNow);
         this.time = formatForTimeNow.format(dateNow);
     }
+
+    protected Note(Parcel in) {
+        title = in.readString();
+        content = in.readString();
+        date = in.readString();
+        time = in.readString();
+    }
+
+    public static final Creator<Note> CREATOR = new Creator<Note>() {
+        @Override
+        public Note createFromParcel(Parcel in) {
+            return new Note(in);
+        }
+
+        @Override
+        public Note[] newArray(int size) {
+            return new Note[size];
+        }
+    };
 
     public void setDate(String date) {
         this.date = date;
@@ -38,5 +60,18 @@ public class Note {
 
     public String getTitle() {
         return title;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(title);
+        parcel.writeString(content);
+        parcel.writeString(date);
+        parcel.writeString(time);
     }
 }
