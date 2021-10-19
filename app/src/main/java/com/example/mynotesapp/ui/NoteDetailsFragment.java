@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
 
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -53,6 +54,7 @@ public class NoteDetailsFragment extends Fragment {
         TextView noteDate = view.findViewById(R.id.note_date);
         TextView noteTime = view.findViewById(R.id.note_time);
         TextView noteContent = view.findViewById(R.id.note_content);
+        noteContent.setMovementMethod(new ScrollingMovementMethod());
 
         if (getArguments() != null && getArguments().containsKey(ARG_NOTE)) {
             Note note = getArguments().getParcelable(ARG_NOTE);
@@ -77,7 +79,7 @@ public class NoteDetailsFragment extends Fragment {
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this.getContext(), dateSetListener, selectedYear, selectedMonth, selectedDayOfMonth);
 
-        Button saveDate = view.findViewById(R.id.save_date);
+        Button saveDate = view.findViewById(R.id.edit_date);
         saveDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

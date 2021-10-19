@@ -9,6 +9,7 @@
 
     <TextView
         android:id="@+id/note_title"
+        android:textColor="@color/dark_grey"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
@@ -16,23 +17,57 @@
     <TextView
         android:id="@+id/note_date"
         android:layout_width="wrap_content"
+        android:textColor="@color/dark_grey"
         android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/note_time"
         android:layout_width="wrap_content"
+        android:textColor="@color/dark_grey"
         android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/note_content"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/default_margin" />
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/default_margin"
+        android:textColor="@color/dark_grey"
+        android:layout_weight="1"
+        android:scrollbars="vertical" />
 
-    <Button
-        android:id="@+id/save_date"
+    <LinearLayout
+        style="?android:attr/buttonBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/save_date" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/edit_date"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/default_margin"
+            android:text="@string/save_date"
+            android:textColor="@color/dark_grey" />
+
+        <Button
+            android:id="@+id/edit_content"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/default_margin"
+            android:text="@string/edit_content"
+            android:textColor="@color/dark_grey" />
+
+        <Button
+            android:id="@+id/delete_note"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/default_margin"
+            android:text="@string/delete_note"
+            android:textColor="@color/dark_grey" />
+
+    </LinearLayout>
 
 </LinearLayout>
