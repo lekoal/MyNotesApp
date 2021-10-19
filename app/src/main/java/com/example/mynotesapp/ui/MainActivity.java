@@ -8,8 +8,10 @@ package com.example.mynotesapp.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 
@@ -22,10 +24,19 @@ public class MainActivity extends AppCompatActivity {
 
     private Note selectedNote;
 
+    StartScreenFragment startScreenFragment;
+
+    FragmentTransaction fTr;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        startScreenFragment = new StartScreenFragment();
+        fTr = getSupportFragmentManager().beginTransaction();
+        fTr.replace(R.id.fragment_container, startScreenFragment);
+        fTr.commit();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 

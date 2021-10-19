@@ -23,7 +23,7 @@ import java.util.Calendar;
 
 public class NoteDetailsFragment extends Fragment {
 
-    public static final String ARG_NOTE = "ARG_NOTE";
+    private static final String ARG_NOTE = "ARG_NOTE";
 
     public static final String KEY_NOTES_LIST_DETAILS = "KEY_NOTES_LIST_DETAILS";
 
