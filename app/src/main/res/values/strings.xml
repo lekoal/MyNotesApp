@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">My Notes App</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="edit_date">Edit date:</string>
+    <string name="save_date">edit date</string>
 </resources>
