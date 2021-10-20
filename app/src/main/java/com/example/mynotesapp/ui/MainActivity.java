@@ -13,20 +13,32 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 
 import com.example.mynotesapp.R;
 import com.example.mynotesapp.domain.Note;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String ARG_NOTE = "ARG_NOTE";
-
-    private Note selectedNote;
-
     StartScreenFragment startScreenFragment;
 
     FragmentTransaction fTr;
+
+    @Override
+    public void onBackPressed() {
+        if (startScreenFragment.getChildFragmentManager().getBackStackEntryCount() > 0) {
+            startScreenFragment.getChildFragmentManager().popBackStackImmediate();
+        } else {
+            super.onBackPressed();
+        }
+
+        View startButtonContainer = findViewById(R.id.start_screen_button_container);
+        if (startButtonContainer.getVisibility() == View.INVISIBLE && startScreenFragment.getChildFragmentManager().findFragmentById(R.id.child_container) == null) { // Всем костыылям костыль!
+            startButtonContainer.setVisibility(View.VISIBLE);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,58 +50,5 @@ public class MainActivity extends AppCompatActivity {
         fTr.replace(R.id.fragment_container, startScreenFragment);
         fTr.commit();
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
-        if (!(fragmentManager.findFragmentById(R.id.fragment_container) instanceof NotesFragment)) {
-            fragmentManager.popBackStack();
-        }
-
-        boolean isLandscape = getResources().getBoolean(R.bool.is_landscape);
-
-        if (savedInstanceState != null && savedInstanceState.containsKey(ARG_NOTE)) {
-            selectedNote = savedInstanceState.getParcelable(ARG_NOTE);
-
-            if (isLandscape) {
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(ARG_NOTE, selectedNote);
-
-                fragmentManager.setFragmentResult(NoteDetailsFragment.KEY_NOTES_LIST_DETAILS, bundle);
-            } else {
-                NoteDetailsFragment detailsFragment = NoteDetailsFragment.newInstance(selectedNote);
-
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, detailsFragment)
-                        .addToBackStack(null)
-                        .commit();
-            }
-        }
-
-        getSupportFragmentManager().setFragmentResultListener(NotesFragment.KEY_NOTES_LIST_ACTIVITY, this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-
-                selectedNote = result.getParcelable(NotesFragment.ARG_NOTE);
-
-                if (isLandscape) {
-
-                    fragmentManager.setFragmentResult(NoteDetailsFragment.KEY_NOTES_LIST_DETAILS, result);
-                } else {
-                    NoteDetailsFragment detailsFragment = NoteDetailsFragment.newInstance(selectedNote);
-
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, detailsFragment)
-                            .addToBackStack(null)
-                            .commit();
-                }
-            }
-        });
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        if (selectedNote != null) {
-            outState.putParcelable(ARG_NOTE, selectedNote);
-        }
-        super.onSaveInstanceState(outState);
     }
 }

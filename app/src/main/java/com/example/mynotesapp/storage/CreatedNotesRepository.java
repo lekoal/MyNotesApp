@@ -5,7 +5,7 @@ import com.example.mynotesapp.domain.Note;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NoteStorage implements NotesRepository {
+public class CreatedNotesRepository implements NotesRepository {
 
     @Override
     public List<Note> getNotes() {

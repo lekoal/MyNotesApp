@@ -10,7 +10,9 @@ import androidx.fragment.app.FragmentResultListener;
 
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
@@ -28,22 +30,23 @@ public class NoteDetailsFragment extends Fragment {
     public static final String KEY_NOTES_LIST_DETAILS = "KEY_NOTES_LIST_DETAILS";
 
     private String newDate;
-    int selectedYear = 2021;
-    int selectedMonth = 10;
-    int selectedDayOfMonth = 18;
-
-    public NoteDetailsFragment() {
-        super(R.layout.fragment_note_details);
-    }
+    private int selectedYear = 2021;
+    private int selectedMonth = 10;
+    private int selectedDayOfMonth = 18;
 
     public static NoteDetailsFragment newInstance(Note note) {
 
         Bundle args = new Bundle();
         args.putParcelable(ARG_NOTE, note);
-
         NoteDetailsFragment fragment = new NoteDetailsFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_note_details, container, false);
     }
 
     @Override
@@ -79,27 +82,13 @@ public class NoteDetailsFragment extends Fragment {
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this.getContext(), dateSetListener, selectedYear, selectedMonth, selectedDayOfMonth);
 
-        Button saveDate = view.findViewById(R.id.edit_date);
-        saveDate.setOnClickListener(new View.OnClickListener() {
+        Button editDate = view.findViewById(R.id.edit_date);
+        editDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 datePickerDialog.show();
 
             }
         });
-
-
-        getParentFragmentManager().setFragmentResultListener(NoteDetailsFragment.KEY_NOTES_LIST_DETAILS, getViewLifecycleOwner(), new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                Note note1 = result.getParcelable(ARG_NOTE);
-
-                noteTitle.setText(note1.getTitle());
-                noteDate.setText(note1.getDate());
-                noteTime.setText(note1.getTime());
-                noteContent.setText(note1.getContent());
-            }
-        });
-
     }
 }
