@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
@@ -44,5 +45,12 @@ public class StartScreenFragment extends Fragment {
                 fTr.commit();
             }
         });
+    }
+
+    public void onBackPressed(Fragment frag) {
+        FragmentManager fm = frag.getChildFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+            fm.popBackStack();
+        }
     }
 }
