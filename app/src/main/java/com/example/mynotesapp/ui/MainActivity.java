@@ -35,7 +35,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         View startButtonContainer = findViewById(R.id.start_screen_button_container);
-        if (startButtonContainer.getVisibility() == View.INVISIBLE && startScreenFragment.getChildFragmentManager().findFragmentById(R.id.child_container) == null) { // Всем костыылям костыль!
+        if (startButtonContainer.getVisibility() == View.INVISIBLE && startScreenFragment.getChildFragmentManager().findFragmentById(R.id.child_container) == null
+        && getResources().getBoolean(R.bool.is_landscape)) { // Всем костылям костыль!
             startButtonContainer.setVisibility(View.VISIBLE);
         }
     }
@@ -49,6 +50,5 @@ public class MainActivity extends AppCompatActivity {
         fTr = getSupportFragmentManager().beginTransaction();
         fTr.replace(R.id.fragment_container, startScreenFragment);
         fTr.commit();
-
     }
 }
