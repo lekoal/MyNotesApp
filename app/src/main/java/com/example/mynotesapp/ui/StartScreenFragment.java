@@ -117,9 +117,7 @@ public class StartScreenFragment extends Fragment {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.view_list_notes:
-                        if (getResources().getBoolean(R.bool.is_landscape)) {
-                            startButtonContainer.setVisibility(View.INVISIBLE);
-                        }
+                        startButtonContainer.setVisibility(View.INVISIBLE);
                         listNotesFragment = new NotesFragment();
                         fTr = getChildFragmentManager().beginTransaction();
                         fTr.replace(R.id.child_container, listNotesFragment);

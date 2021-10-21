@@ -35,8 +35,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         View startButtonContainer = findViewById(R.id.start_screen_button_container);
-        if (getResources().getBoolean(R.bool.is_landscape) &&
-                startButtonContainer.getVisibility() == View.INVISIBLE &&
+        if (startButtonContainer.getVisibility() == View.INVISIBLE &&
                 startScreenFragment.getChildFragmentManager().findFragmentById(R.id.child_container) == null) { // Всем костылям костыль!
             startButtonContainer.setVisibility(View.VISIBLE);
         }
