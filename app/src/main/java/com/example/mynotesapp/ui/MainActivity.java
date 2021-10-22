@@ -8,6 +8,7 @@ package com.example.mynotesapp.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
@@ -15,6 +16,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 
 import com.example.mynotesapp.R;
@@ -50,5 +52,18 @@ public class MainActivity extends AppCompatActivity {
         fTr = getSupportFragmentManager().beginTransaction();
         fTr.replace(R.id.fragment_container, startScreenFragment);
         fTr.commit();
+
+        initToolbar();
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 }

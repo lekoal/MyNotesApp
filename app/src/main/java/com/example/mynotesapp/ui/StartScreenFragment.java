@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
@@ -19,6 +20,8 @@ import android.widget.Toast;
 
 import com.example.mynotesapp.R;
 import com.example.mynotesapp.domain.Note;
+
+import java.util.Objects;
 
 public class StartScreenFragment extends Fragment {
 
