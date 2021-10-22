@@ -11,4 +11,5 @@
     <string name="menu">menu</string>
     <string name="about_app">about app</string>
     <string name="close">Close</string>
+    <string name="about">This is some awesome and pretty ugly application</string>
 </resources>
