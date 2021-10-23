@@ -12,4 +12,9 @@
     <string name="about_app">about app</string>
     <string name="close">Close</string>
     <string name="about">This is some awesome and pretty ugly application</string>
+    <string name="drawer_home">Home</string>
+    <string name="drawer_note_list">All notes</string>
+    <string name="drawer_about">About My Notes App</string>
+    <string name="drawer_exit">Exit</string>
+    <string name="drawer_header_text">My notes</string>
 </resources>

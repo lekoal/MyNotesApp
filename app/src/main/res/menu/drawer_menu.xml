@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/start_page"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="@string/drawer_home" />
+
+    <item
+        android:id="@+id/drawer_note_list"
+        android:icon="@drawable/ic_baseline_format_list_bulleted_24"
+        android:title="@string/drawer_note_list" />
+
+    <item
+        android:id="@+id/drawer_about_app"
+        android:icon="@drawable/ic_baseline_info_24"
+        android:title="@string/drawer_about" />
+
+    <item
+        android:id="@+id/drawer_exit"
+        android:icon="@drawable/ic_baseline_exit_to_app_24"
+        android:title="@string/drawer_exit" />
+
+</menu>
