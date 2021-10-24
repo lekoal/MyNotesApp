@@ -13,6 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -34,15 +35,19 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isLand;
 
+    private FragmentManager fragmentManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        fragmentManager = getSupportFragmentManager();
+
         isLand = getResources().getBoolean(R.bool.is_landscape);
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
+            fragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, stFr)
                     .commit();
         }
@@ -97,8 +102,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openHomePage() {
-        getSupportFragmentManager()
-                .beginTransaction()
+        if (isLand) {
+            removeInSecondContIfNotEmpty();
+        }
+        fragmentManager.beginTransaction()
                 .addToBackStack(null)
                 .replace(R.id.fragment_container, stFr)
                 .commit();
@@ -106,8 +113,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openAboutFragment() {
-        getSupportFragmentManager()
-                .beginTransaction()
+        if (isLand) {
+            removeInSecondContIfNotEmpty();
+        }
+        fragmentManager.beginTransaction()
                 .addToBackStack(null)
                 .replace(R.id.fragment_container, aboutFr)
                 .commit();
@@ -116,13 +125,11 @@ public class MainActivity extends AppCompatActivity {
     private void openNoteList() {
         if (isLand) {
             removeInPrimContIfNotEmpty();
-            getSupportFragmentManager()
-                    .beginTransaction()
+            fragmentManager.beginTransaction()
                     .replace(R.id.fragment_container_left, notesFr)
                     .commit();
         } else {
-            getSupportFragmentManager()
-                    .beginTransaction()
+            fragmentManager.beginTransaction()
                     .addToBackStack(null)
                     .replace(R.id.fragment_container, notesFr)
                     .commit();
@@ -130,29 +137,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void removeInPrimContIfNotEmpty() {
-        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) != null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
+        if (fragmentManager.findFragmentById(R.id.fragment_container) != null) {
+            fragmentManager.beginTransaction()
                     .addToBackStack(null)
-                    .remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentById(R.id.fragment_container)))
+                    .remove(Objects.requireNonNull(fragmentManager.findFragmentById(R.id.fragment_container)))
                     .commit();
         }
     }
 
     private void removeInSecondContIfNotEmpty() {
-        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container_left) != null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
+        if (fragmentManager.findFragmentById(R.id.fragment_container_left) != null) {
+            fragmentManager.beginTransaction()
                     .addToBackStack(null)
-                    .remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentById(R.id.fragment_container_left)))
+                    .remove(Objects.requireNonNull(fragmentManager.findFragmentById(R.id.fragment_container_left)))
                     .commit();
         }
 
-        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container_right) != null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
+        if (fragmentManager.findFragmentById(R.id.fragment_container_right) != null) {
+            fragmentManager.beginTransaction()
                     .addToBackStack(null)
-                    .remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentById(R.id.fragment_container_right)))
+                    .remove(Objects.requireNonNull(fragmentManager.findFragmentById(R.id.fragment_container_right)))
                     .commit();
         }
     }
@@ -167,8 +171,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_about) {
-            getSupportFragmentManager()
-                    .beginTransaction()
+            fragmentManager.beginTransaction()
                     .addToBackStack(null)
                     .replace(R.id.fragment_container, aboutFr)
                     .commit();
@@ -178,20 +181,5 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void buttonsListener(Button button) {
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (v.getId() == R.id.view_list_notes) {
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .addToBackStack(null)
-                            .replace(R.id.fragment_container, notesFr)
-                            .commit();
-                }
-            }
-        });
     }
 }

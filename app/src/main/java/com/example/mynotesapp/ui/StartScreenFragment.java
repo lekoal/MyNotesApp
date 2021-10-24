@@ -23,15 +23,9 @@ public class StartScreenFragment extends Fragment implements View.OnClickListene
 
     private boolean isLand;
 
-    private static final String ARG_NOTE = "ARG_NOTE";
-
-    private Note selectedNote;
+    private Fragment notesFr;
 
     private FragmentManager fragmentManager;
-
-    public StartScreenFragment() {
-        super(R.layout.fragment_start_screen);
-    }
 
     @Nullable
     @Override
@@ -53,45 +47,12 @@ public class StartScreenFragment extends Fragment implements View.OnClickListene
         settings.setOnClickListener(this);
         aboutApp.setOnClickListener(this);
 
+        notesFr = new NotesFragment();
+
         fragmentManager = getParentFragmentManager();
 
         isLand = getResources().getBoolean(R.bool.is_landscape);
 
-        if (savedInstanceState != null && savedInstanceState.containsKey(ARG_NOTE)) {
-            selectedNote = savedInstanceState.getParcelable(ARG_NOTE);
-
-            NoteDetailsFragment detailsFragment = NoteDetailsFragment.newInstance(selectedNote);
-            if (isLand) {
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(ARG_NOTE, selectedNote);
-            } else {
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, detailsFragment)
-                        .addToBackStack(null)
-                        .commit();
-            }
-        }
-
-        fragmentManager.setFragmentResultListener(NotesFragment.KEY_NOTES_LIST_ACTIVITY, this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-
-                selectedNote = result.getParcelable(NotesFragment.ARG_NOTE);
-
-                NoteDetailsFragment detailsFragment = NoteDetailsFragment.newInstance(selectedNote);
-                if (isLand) {
-                    removeInPrimContIfNotEmpty();
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container_right, detailsFragment)
-                            .commit();
-                } else {
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, detailsFragment)
-                            .addToBackStack(null)
-                            .commit();
-                }
-            }
-        });
     }
 
     @Override
@@ -100,12 +61,12 @@ public class StartScreenFragment extends Fragment implements View.OnClickListene
             if (isLand) {
                 removeInPrimContIfNotEmpty();
                 fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container_left, new NotesFragment())
+                        .replace(R.id.fragment_container_left, notesFr)
                         .commit();
             } else {
                 fragmentManager.beginTransaction()
                         .addToBackStack(null)
-                        .replace(R.id.fragment_container, new NotesFragment())
+                        .replace(R.id.fragment_container, notesFr)
                         .commit();
             }
 
@@ -122,19 +83,11 @@ public class StartScreenFragment extends Fragment implements View.OnClickListene
     }
 
     private void removeInPrimContIfNotEmpty() {
-        if (fragmentManager.findFragmentById(R.id.fragment_container) != null && isLand) {
+        if (fragmentManager.findFragmentById(R.id.fragment_container) != null) {
             fragmentManager.beginTransaction()
                     .addToBackStack(null)
                     .remove(Objects.requireNonNull(fragmentManager.findFragmentById(R.id.fragment_container)))
                     .commit();
         }
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        if (selectedNote != null) {
-            outState.putParcelable(ARG_NOTE, selectedNote);
-        }
-        super.onSaveInstanceState(outState);
     }
 }
