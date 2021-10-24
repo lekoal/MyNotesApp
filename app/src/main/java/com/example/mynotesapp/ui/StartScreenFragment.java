@@ -83,7 +83,6 @@ public class StartScreenFragment extends Fragment implements View.OnClickListene
                     removeInPrimContIfNotEmpty();
                     fragmentManager.beginTransaction()
                             .replace(R.id.fragment_container_right, detailsFragment)
-                            .addToBackStack(null)
                             .commit();
                 } else {
                     fragmentManager.beginTransaction()
