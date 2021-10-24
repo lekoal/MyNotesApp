@@ -23,6 +23,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.mynotesapp.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.Objects;
@@ -46,8 +48,26 @@ public class MainActivity extends AppCompatActivity {
 
         isLand = getResources().getBoolean(R.bool.is_landscape);
 
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                if (id == R.id.action_about) {
+                    openAboutFragment();
+                    return true;
+                } else if (id == R.id.action_exit) {
+                    finish();
+                    return true;
+                }
+                return false;
+            }
+        });
+
         if (savedInstanceState == null) {
-            fragmentManager.beginTransaction()
+            getSupportFragmentManager()
+                    .beginTransaction()
                     .replace(R.id.fragment_container, stFr)
                     .commit();
         }
