@@ -8,91 +8,58 @@
     tools:context=".ui.StartScreenFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/fragment_start_screen"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="?attr/actionBarSize"
         android:background="@color/white"
         android:paddingHorizontal="@dimen/start_screen_padding"
-        android:layout_marginTop="?attr/actionBarSize"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <FrameLayout
-            android:id="@+id/child_container"
-            android:layout_width="@dimen/start_button_width"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/child_container2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <Button
+        android:id="@+id/view_list_notes"
+        android:layout_width="@dimen/start_button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/start_screen_button_v_margin"
+        android:text="@string/list_of_notes"
+        app:layout_constraintBottom_toTopOf="@id/add_note"
+        app:layout_constraintEnd_toStartOf="@id/settings"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <FrameLayout
-            android:id="@+id/child_container2"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/start_screen_button_v_margin"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/child_container"
-            app:layout_constraintTop_toTopOf="parent" />
+    <Button
+        android:id="@+id/add_note"
+        android:layout_width="@dimen/start_button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/start_screen_button_v_margin"
+        android:text="@string/new_note"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/about_app"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_list_notes" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+        android:id="@+id/settings"
+        android:layout_width="@dimen/start_button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/start_screen_button_v_margin"
+        android:text="@string/settings"
+        app:layout_constraintBottom_toTopOf="@id/about_app"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/view_list_notes"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/start_screen_button_container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/white"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <Button
-            android:id="@+id/view_list_notes"
-            android:layout_width="@dimen/start_button_width"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/start_screen_button_v_margin"
-            android:text="@string/list_of_notes"
-            app:layout_constraintBottom_toTopOf="@id/add_note"
-            app:layout_constraintEnd_toStartOf="@id/settings"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/add_note"
-            android:layout_width="@dimen/start_button_width"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/start_screen_button_v_margin"
-            android:text="@string/new_note"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/about_app"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_list_notes" />
-
-        <Button
-            android:id="@+id/settings"
-            android:layout_width="@dimen/start_button_width"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/start_screen_button_v_margin"
-            android:text="@string/settings"
-            app:layout_constraintBottom_toTopOf="@id/about_app"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/view_list_notes"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/about_app"
-            android:layout_width="@dimen/start_button_width"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/start_screen_button_v_margin"
-            android:text="@string/about_app"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/add_note"
-            app:layout_constraintTop_toBottomOf="@id/settings" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+    <Button
+        android:id="@+id/about_app"
+        android:layout_width="@dimen/start_button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/start_screen_button_v_margin"
+        android:text="@string/about_app"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/add_note"
+        app:layout_constraintTop_toBottomOf="@id/settings" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
