@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">My Notes App</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="app_name">My Notes</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="edit_date">Edit date:</string>
     <string name="save_date">edit date</string>
@@ -14,7 +13,11 @@
     <string name="about">This is some awesome and pretty ugly application</string>
     <string name="drawer_home">Home</string>
     <string name="drawer_note_list">All notes</string>
-    <string name="drawer_about">About My Notes App</string>
+    <string name="drawer_about">About My Notes</string>
     <string name="drawer_exit">Exit</string>
     <string name="drawer_header_text">My notes</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="settings">Settings</string>
+    <string name="drawer_settings">Settings</string>
 </resources>

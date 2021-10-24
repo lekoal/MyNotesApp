@@ -7,59 +7,154 @@ package com.example.mynotesapp.ui;
 // По сравнению с Serializable, создание Parcelable объекта требует большого количества шаблонного кода, особенно для разработчиков java. Но в Serializable используется отражение, и в процессе будет создано много временных объектов. Таким образом, будет использовано много памяти. С другой стороны, Parcelable быстрее иболее оптимизирован, чем Serializable, потому что ответственность за создание объекта parcel лежит на разработчике, поэтому нет необходимости использовать отражение.
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentResultListener;
-import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.mynotesapp.R;
-import com.example.mynotesapp.domain.Note;
+import com.google.android.material.navigation.NavigationView;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
-    StartScreenFragment startScreenFragment;
+    private final Fragment stFr = new StartScreenFragment();
+    private final Fragment notesFr = new NotesFragment();
+    private final Fragment aboutFr = new AboutFragment();
 
-    FragmentTransaction fTr;
-
-    @Override
-    public void onBackPressed() {
-        if (startScreenFragment.getChildFragmentManager().getBackStackEntryCount() > 0) {
-            startScreenFragment.getChildFragmentManager().popBackStackImmediate();
-        } else {
-            super.onBackPressed();
-        }
-
-        View startButtonContainer = findViewById(R.id.start_screen_button_container);
-        if (startButtonContainer.getVisibility() == View.INVISIBLE &&
-                startScreenFragment.getChildFragmentManager().findFragmentById(R.id.child_container) == null) { // Всем костылям костыль!
-            startButtonContainer.setVisibility(View.VISIBLE);
-        }
-    }
+    private boolean isLand;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        startScreenFragment = new StartScreenFragment();
-        fTr = getSupportFragmentManager().beginTransaction();
-        fTr.replace(R.id.fragment_container, startScreenFragment);
-        fTr.commit();
+        isLand = getResources().getBoolean(R.bool.is_landscape);
 
-        initToolbar();
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, stFr)
+                    .commit();
+        }
+
+        initToolbarAndDrawer();
+
     }
 
-    private void initToolbar() {
+    private void initToolbarAndDrawer() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        initDrawer(toolbar);
+    }
+
+    private void initDrawer(Toolbar toolbar) {
+        final DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                if (id == R.id.drawer_about_app) {
+                    openAboutFragment();
+                    drawer.closeDrawer(GravityCompat.START);
+                    return true;
+                } else if (id == R.id.drawer_exit) {
+                    finish();
+                    return true;
+                } else if (id == R.id.drawer_note_list) {
+                    openNoteList();
+                    drawer.closeDrawer(GravityCompat.START);
+                    return true;
+                } else if (id == R.id.start_page) {
+                    openHomePage();
+                    drawer.closeDrawer(GravityCompat.START);
+                    return true;
+                } else if (id == R.id.drawer_settings) {
+                    Toast.makeText(getApplicationContext(), "settings button is pressed!", Toast.LENGTH_SHORT).show();
+                    drawer.closeDrawer(GravityCompat.START);
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void openHomePage() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.fragment_container, stFr)
+                .commit();
+
+    }
+
+    private void openAboutFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.fragment_container, aboutFr)
+                .commit();
+    }
+
+    private void openNoteList() {
+        if (isLand) {
+            removeInPrimContIfNotEmpty();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container_left, notesFr)
+                    .commit();
+        } else {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .addToBackStack(null)
+                    .replace(R.id.fragment_container, notesFr)
+                    .commit();
+        }
+    }
+
+    private void removeInPrimContIfNotEmpty() {
+        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .addToBackStack(null)
+                    .remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentById(R.id.fragment_container)))
+                    .commit();
+        }
+    }
+
+    private void removeInSecondContIfNotEmpty() {
+        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container_left) != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .addToBackStack(null)
+                    .remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentById(R.id.fragment_container_left)))
+                    .commit();
+        }
+
+        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container_right) != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .addToBackStack(null)
+                    .remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentById(R.id.fragment_container_right)))
+                    .commit();
+        }
     }
 
     @Override
@@ -75,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager()
                     .beginTransaction()
                     .addToBackStack(null)
-                    .replace(R.id.fragment_container, new AboutFragment())
+                    .replace(R.id.fragment_container, aboutFr)
                     .commit();
             return true;
         } else if (id == R.id.action_exit) {
@@ -83,5 +178,20 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void buttonsListener(Button button) {
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v.getId() == R.id.view_list_notes) {
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .addToBackStack(null)
+                            .replace(R.id.fragment_container, notesFr)
+                            .commit();
+                }
+            }
+        });
     }
 }
