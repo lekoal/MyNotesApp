@@ -66,8 +66,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
+            fragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, stFr)
                     .commit();
         }
