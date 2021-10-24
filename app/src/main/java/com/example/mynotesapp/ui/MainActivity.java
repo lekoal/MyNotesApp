@@ -1,86 +1,69 @@
 package com.example.mynotesapp.ui;
 
-// requireActivity() возвращает Activity фрагмента, с которым в данный момент связан этот фрагмент. Метод, который возвращает ненулевой экземпляр Activity, в которой располагается  фрагмент, или создает исключение. Если вы на 100 % уверены, что в жизненном цикле вашего фрагмента Activity не равна нулю, используйте requireActivity(),  в противном случае поместите его в блок try-catch, чтобы избежать исключения NullPointerException.
+// Serializable - это стандартный интерфейс Java. Вы просто отмечаете класс Serializable, реализуя интерфейс, и Java будет автоматически сериализовать его в определенных ситуациях.
 //
-// requireContext() возвращает контекст, с которым в данный момент связан этот фрагмент. Возвращает ненулевой контекст или создает исключение, когда он недоступен. Если ваш код находится на этапе жизненного цикла, когда вы знаете, что ваш фрагмент прикреплен к контексту, просто используйте requireContext(), чтобы получить контекст.
+// Parcelable - это особый интерфейс для Android, где вы сами реализуете сериализацию. Он был создан гораздо эффективнее, чем Serializable, и чтобы обойти некоторые проблемы со схемой сериализации Java по умолчанию.
 //
-// getActivity() возвращает Activity, с которым в данный момент связан этот фрагмент. Может возвращать значение null, если фрагмент вместо этого связан с контекстом. Возвращает объект действия, к которому прикреплен фрагмент. Причина, по которой getActivity() во фрагменте не рекомендуется, заключается в следующем: этот метод вернет Activity, прикрепленное к текущему фрагменту. Когда жизненный цикл фрагмента заканчивается и уничтожается, getActivity() возвращает значение null, поэтому необходимо обрабатывать нулевые случаи, которые могут возникнуть при использовании getActivity().
-//
-// getContext() возвращает контекст, с которым в данный момент связан этот фрагмент. Это метод в классе View, доступ к которому возможен только в классе, который наследуется от класса View, и возвращает контекст Activity, в котором выполняется текущее View. Возвращает контекст, допускающий значение null. Если ваш код выходит за рамки обычного жизненного цикла фрагмента (скажем, асинхронный обратный вызов), вам может быть лучше использовать getContext(), самостоятельно проверяя его возвращаемое значение и продолжая использовать его только в том случае, если оно не равно нулю.
+// По сравнению с Serializable, создание Parcelable объекта требует большого количества шаблонного кода, особенно для разработчиков java. Но в Serializable используется отражение, и в процессе будет создано много временных объектов. Таким образом, будет использовано много памяти. С другой стороны, Parcelable быстрее иболее оптимизирован, чем Serializable, потому что ответственность за создание объекта parcel лежит на разработчике, поэтому нет необходимости использовать отражение.
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.View;
 
 import com.example.mynotesapp.R;
 import com.example.mynotesapp.domain.Note;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String ARG_NOTE = "ARG_NOTE";
+    StartScreenFragment startScreenFragment;
 
-    private Note selectedNote;
+    FragmentTransaction fTr;
+
+    @Override
+    public void onBackPressed() {
+        if (startScreenFragment.getChildFragmentManager().getBackStackEntryCount() > 0) {
+            startScreenFragment.getChildFragmentManager().popBackStackImmediate();
+        } else {
+            super.onBackPressed();
+        }
+
+        View startButtonContainer = findViewById(R.id.start_screen_button_container);
+        if (startButtonContainer.getVisibility() == View.INVISIBLE &&
+                startScreenFragment.getChildFragmentManager().findFragmentById(R.id.child_container) == null) { // Всем костылям костыль!
+            startButtonContainer.setVisibility(View.VISIBLE);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        startScreenFragment = new StartScreenFragment();
+        fTr = getSupportFragmentManager().beginTransaction();
+        fTr.replace(R.id.fragment_container, startScreenFragment);
+        fTr.commit();
 
-        if (!(fragmentManager.findFragmentById(R.id.fragment_container) instanceof NotesFragment)) {
-            fragmentManager.popBackStack();
-        }
+        initToolbar();
+    }
 
-        boolean isLandscape = getResources().getBoolean(R.bool.is_landscape);
-
-        if (savedInstanceState != null && savedInstanceState.containsKey(ARG_NOTE)) {
-            selectedNote = savedInstanceState.getParcelable(ARG_NOTE);
-
-            if (isLandscape) {
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(ARG_NOTE, selectedNote);
-
-                fragmentManager.setFragmentResult(NoteDetailsFragment.KEY_NOTES_LIST_DETAILS, bundle);
-            } else {
-                NoteDetailsFragment detailsFragment = NoteDetailsFragment.newInstance(selectedNote);
-
-                fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, detailsFragment)
-                        .addToBackStack(null)
-                        .commit();
-            }
-        }
-
-        getSupportFragmentManager().setFragmentResultListener(NotesFragment.KEY_NOTES_LIST_ACTIVITY, this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-
-                selectedNote = result.getParcelable(NotesFragment.ARG_NOTE);
-
-                if (isLandscape) {
-
-                    fragmentManager.setFragmentResult(NoteDetailsFragment.KEY_NOTES_LIST_DETAILS, result);
-                } else {
-                    NoteDetailsFragment detailsFragment = NoteDetailsFragment.newInstance(selectedNote);
-
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, detailsFragment)
-                            .addToBackStack(null)
-                            .commit();
-                }
-            }
-        });
+    private void initToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
     @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        if (selectedNote != null) {
-            outState.putParcelable(ARG_NOTE, selectedNote);
-        }
-        super.onSaveInstanceState(outState);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 }

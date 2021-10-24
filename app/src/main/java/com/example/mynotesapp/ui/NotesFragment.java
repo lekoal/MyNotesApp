@@ -14,8 +14,7 @@ import android.widget.TextView;
 
 import com.example.mynotesapp.R;
 import com.example.mynotesapp.domain.Note;
-import com.example.mynotesapp.storage.NoteStorage;
-import com.example.mynotesapp.storage.NotesRepository;
+import com.example.mynotesapp.storage.CreatedNotesRepository;
 
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class NotesFragment extends Fragment implements NotesListView {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        presenter = new NotesListPresenter(this, new NoteStorage());
+        presenter = new NotesListPresenter(this, new CreatedNotesRepository());
     }
 
     @Nullable

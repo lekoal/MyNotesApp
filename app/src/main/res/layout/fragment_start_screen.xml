@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".ui.StartScreenFragment">
+
+    <FrameLayout
+        android:id="@+id/child_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/start_screen_button_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/view_list_notes"
+            android:layout_width="@dimen/start_button_width"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/start_screen_button_v_margin"
+            android:text="@string/list_of_notes" />
+
+        <Button
+            android:id="@+id/add_note"
+            android:layout_width="@dimen/start_button_width"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/start_screen_button_v_margin"
+            android:text="@string/new_note" />
+
+        <Button
+            android:id="@+id/show_menu"
+            android:layout_width="@dimen/start_button_width"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/start_screen_button_v_margin"
+            android:text="@string/menu" />
+
+        <Button
+            android:id="@+id/about_app"
+            android:layout_width="@dimen/start_button_width"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/start_screen_button_v_margin"
+            android:text="@string/about_app" />
+
+    </LinearLayout>
+</LinearLayout>
