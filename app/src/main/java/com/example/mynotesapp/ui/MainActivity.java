@@ -201,4 +201,18 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onBackPressed() {
+        if (isLand) {
+            if (fragmentManager.findFragmentById(R.id.fragment_container) == null &&
+                    fragmentManager.findFragmentById(R.id.fragment_container_right) == null) {
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, stFr)
+                        .commit();
+            }
+        }
+
+        super.onBackPressed();
+    }
 }

@@ -61,6 +61,7 @@ public class StartScreenFragment extends Fragment implements View.OnClickListene
             if (isLand) {
                 removeInPrimContIfNotEmpty();
                 fragmentManager.beginTransaction()
+                        .addToBackStack(null)
                         .replace(R.id.fragment_container_left, notesFr)
                         .commit();
             } else {
@@ -85,7 +86,6 @@ public class StartScreenFragment extends Fragment implements View.OnClickListene
     private void removeInPrimContIfNotEmpty() {
         if (fragmentManager.findFragmentById(R.id.fragment_container) != null) {
             fragmentManager.beginTransaction()
-                    .addToBackStack(null)
                     .remove(Objects.requireNonNull(fragmentManager.findFragmentById(R.id.fragment_container)))
                     .commit();
         }

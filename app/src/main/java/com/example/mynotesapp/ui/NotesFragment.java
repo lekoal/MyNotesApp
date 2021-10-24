@@ -96,6 +96,7 @@ public class NotesFragment extends Fragment implements NotesListView {
                 if (isLand) {
                     removeInPrimContIfNotEmpty();
                     fragmentManager.beginTransaction()
+                            .addToBackStack(null)
                             .replace(R.id.fragment_container_right, detailsFragment)
                             .commit();
                 } else {
