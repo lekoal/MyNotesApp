@@ -15,7 +15,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,6 +37,21 @@ public class MainActivity extends AppCompatActivity {
     private final Fragment notesFr = new NotesFragment();
     private final Fragment aboutFr = new AboutFragment();
 
+    private final int backColorRed = 1;
+    private final int backColorBlue = 2;
+    private final int backColorGreen = 3;
+    private final int backColorBlack = 4;
+    private final int backColorWhite = 5;
+
+    private final int backLandColorRed = 6;
+    private final int backLandColorBlue = 7;
+    private final int backLandColorGreen = 8;
+    private final int backLandColorBlack = 9;
+    private final int backLandColorWhite = 10;
+
+    private View textColor;
+    private View textColorLand;
+
     private boolean isLand;
 
     private FragmentManager fragmentManager;
@@ -45,6 +62,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         fragmentManager = getSupportFragmentManager();
+
+        textColor = findViewById(R.id.fragment_container);
+        textColorLand = findViewById(R.id.fragment_container_right);
+
+        if (isLand) {
+            registerForContextMenu(textColorLand);
+        } else {
+            registerForContextMenu(textColor);
+        }
 
         isLand = getResources().getBoolean(R.bool.is_landscape);
 
@@ -187,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) { // В landscape фрагменты накладываются друг на друга, поэтому пришлось заняться "жонглированием"
         int id = item.getItemId();
         if (id == R.id.action_about) {
             fragmentManager.beginTransaction()
@@ -214,5 +240,62 @@ public class MainActivity extends AppCompatActivity {
         }
 
         super.onBackPressed();
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        switch (v.getId()) {
+            case R.id.fragment_container:
+                menu.add(0, backColorRed, 0, "Red");
+                menu.add(0, backColorBlue, 0, "Blue");
+                menu.add(0, backColorGreen, 0, "Green");
+                menu.add(0, backColorBlack, 0, "Black");
+                menu.add(0, backColorWhite, 0, "White");
+                break;
+            case R.id.fragment_container_right:
+                menu.add(0, backLandColorRed, 0, "Red");
+                menu.add(0, backLandColorBlue, 0, "Blue");
+                menu.add(0, backLandColorGreen, 0, "Green");
+                menu.add(0, backLandColorBlack, 0, "Black");
+                menu.add(0, backLandColorWhite, 0, "White");
+                break;
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case backColorRed:
+                textColor.setBackgroundColor(Color.RED);
+                break;
+            case backColorBlue:
+                textColor.setBackgroundColor(Color.BLUE);
+                break;
+            case backColorGreen:
+                textColor.setBackgroundColor(Color.GREEN);
+                break;
+            case backColorBlack:
+                textColor.setBackgroundColor(Color.BLACK);
+                break;
+            case backColorWhite:
+                textColor.setBackgroundColor(Color.WHITE);
+                break;
+            case backLandColorRed:
+                textColorLand.setBackgroundColor(Color.RED);
+                break;
+            case backLandColorBlue:
+                textColorLand.setBackgroundColor(Color.BLUE);
+                break;
+            case backLandColorGreen:
+                textColorLand.setBackgroundColor(Color.GREEN);
+                break;
+            case backLandColorBlack:
+                textColorLand.setBackgroundColor(Color.BLACK);
+                break;
+            case backLandColorWhite:
+                textColorLand.setBackgroundColor(Color.WHITE);
+                break;
+        }
+        return super.onContextItemSelected(item);
     }
 }
