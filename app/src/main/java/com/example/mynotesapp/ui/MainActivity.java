@@ -300,6 +300,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void onDialogResult(String text) {
-        Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "Entered text: " + text, Toast.LENGTH_SHORT).show();
     }
 }

@@ -22,4 +22,5 @@
     <string name="drawer_settings">Settings</string>
     <string name="bottom_dialog_text">SETTINGS BUTTON IS PRESSED</string>
     <string name="show_toast">show toast</string>
+    <string name="show_notification">show notification</string>
 </resources>

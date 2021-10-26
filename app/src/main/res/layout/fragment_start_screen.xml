@@ -41,4 +41,11 @@
         android:layout_marginVertical="@dimen/start_screen_button_v_margin"
         android:text="@string/about_app" />
 
+    <Button
+        android:id="@+id/show_notification"
+        android:layout_width="@dimen/start_button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/start_screen_button_v_margin"
+        android:text="@string/show_notification" />
+
 </LinearLayout>
