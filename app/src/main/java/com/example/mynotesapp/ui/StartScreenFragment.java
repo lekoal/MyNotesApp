@@ -45,7 +45,7 @@ public class StartScreenFragment extends Fragment implements View.OnClickListene
 
         showNotesList.setOnClickListener(this);
         newNote.setOnClickListener(view1 -> showSnackBar());
-        settings.setOnClickListener(this);
+        settings.setOnClickListener(view1 -> showBottomSheet());
         aboutApp.setOnClickListener(this);
 
         notesFr = new NotesFragment();
@@ -71,9 +71,6 @@ public class StartScreenFragment extends Fragment implements View.OnClickListene
                         .replace(R.id.fragment_container, notesFr)
                         .commit();
             }
-
-        } else if (v.getId() == R.id.settings) {
-            Toast.makeText(getActivity(), "settings button is pressed!", Toast.LENGTH_SHORT).show();
         } else if (v.getId() == R.id.about_app) {
             fragmentManager.beginTransaction()
                     .addToBackStack(null)
@@ -103,5 +100,9 @@ public class StartScreenFragment extends Fragment implements View.OnClickListene
 
     private void showToast() {
         Toast.makeText(getActivity(), "new note button is pressed!", Toast.LENGTH_SHORT).show();
+    }
+
+    private void showBottomSheet() {
+        new MyBottomSheetFragment().show(getParentFragmentManager(), MyBottomSheetFragment.TAG);
     }
 }
