@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.mynotesapp.R;
 import com.example.mynotesapp.domain.Note;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
@@ -43,7 +44,7 @@ public class StartScreenFragment extends Fragment implements View.OnClickListene
         Button aboutApp = view.findViewById(R.id.about_app);
 
         showNotesList.setOnClickListener(this);
-        newNote.setOnClickListener(this);
+        newNote.setOnClickListener(view1 -> showSnackBar());
         settings.setOnClickListener(this);
         aboutApp.setOnClickListener(this);
 
@@ -71,8 +72,6 @@ public class StartScreenFragment extends Fragment implements View.OnClickListene
                         .commit();
             }
 
-        } else if (v.getId() == R.id.add_note) {
-            Toast.makeText(getActivity(), "new note button is pressed!", Toast.LENGTH_SHORT).show();
         } else if (v.getId() == R.id.settings) {
             Toast.makeText(getActivity(), "settings button is pressed!", Toast.LENGTH_SHORT).show();
         } else if (v.getId() == R.id.about_app) {
@@ -89,5 +88,20 @@ public class StartScreenFragment extends Fragment implements View.OnClickListene
                     .remove(Objects.requireNonNull(fragmentManager.findFragmentById(R.id.fragment_container)))
                     .commit();
         }
+    }
+
+    private void showSnackBar() {
+        Snackbar.make(requireActivity().findViewById(R.id.add_note), "Add Note is pressed", Snackbar.LENGTH_INDEFINITE)
+                .setAction("OK", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showToast();
+                    }
+                })
+                .show();
+    }
+
+    private void showToast() {
+        Toast.makeText(getActivity(), "new note button is pressed!", Toast.LENGTH_SHORT).show();
     }
 }
