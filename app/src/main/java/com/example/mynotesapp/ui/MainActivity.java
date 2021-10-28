@@ -14,6 +14,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentResultListener;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
@@ -67,6 +68,14 @@ public class MainActivity extends AppCompatActivity {
 
         textColor = findViewById(R.id.fragment_container);
         textColorLand = findViewById(R.id.fragment_container_right);
+
+        getSupportFragmentManager().setFragmentResultListener(MyBottomSheetFragment.EXCHANGE_DATA_TAG, this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                String textResult = result.getString(MyBottomSheetFragment.TEXT_RESULT);
+                Toast.makeText(MainActivity.this, "Entered text: " + textResult, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         if (isLand) {
             registerForContextMenu(textColorLand);
@@ -306,9 +315,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onContextItemSelected(item);
     }
 
-    public void onDialogResult(String text) {
-        Toast.makeText(MainActivity.this, "Entered text: " + text, Toast.LENGTH_SHORT).show();
-    }
+//    public void onDialogResult(String text) {
+//        Toast.makeText(MainActivity.this, "Entered text: " + text, Toast.LENGTH_SHORT).show();
+//    }
 
     public void showAlertOnExitDialog() {
         new AlertOnExitFragment().show(getSupportFragmentManager(), AlertOnExitFragment.TAG);
