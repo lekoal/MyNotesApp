@@ -137,8 +137,7 @@ public class StartScreenFragment extends Fragment implements View.OnClickListene
         String descriptionText = "Description";
         int importance = NotificationManagerCompat.IMPORTANCE_DEFAULT;
         NotificationChannelCompat.Builder channel = new NotificationChannelCompat.Builder(CHANNEL_ID, importance);
-        channel
-                .setName(name)
+        channel.setName(name)
                 .setDescription(descriptionText);
 
         notificationManager.createNotificationChannel(channel.build());
