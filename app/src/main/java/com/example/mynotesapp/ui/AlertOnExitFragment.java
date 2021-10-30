@@ -27,27 +27,20 @@ public class AlertOnExitFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         Activity activity = requireActivity();
         AlertDialog dialog = new AlertDialog.Builder(activity).create();
-        dialog.setTitle("Alert!");
-        dialog.setMessage("Are you sure wanna to exit?");
+        dialog.setTitle(getString(R.string.alert_message_title));
+        dialog.setMessage(getString(R.string.alert_message_content));
         dialog.setIcon(R.drawable.ic_baseline_warning_24);
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Toast.makeText(activity, "Exiting application...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, getString(R.string.exiting_message), Toast.LENGTH_SHORT).show();
                 activity.finish();
             }
         });
         dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", (dialogInterface, i) ->
-                Toast.makeText(activity, "Cancelled", Toast.LENGTH_SHORT).show());
+                Toast.makeText(activity, getString(R.string.exit_cancelling_message), Toast.LENGTH_SHORT).show());
         return dialog;
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        return inflater.inflate(R.layout.fragment_alert_on_exit, container, false);
     }
 }

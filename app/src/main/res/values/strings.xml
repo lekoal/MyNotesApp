@@ -23,4 +23,14 @@
     <string name="bottom_dialog_text">SETTINGS BUTTON IS PRESSED</string>
     <string name="show_toast">show toast</string>
     <string name="show_notification">show notification</string>
+    <string name="alert_message_title">Alert!</string>
+    <string name="alert_message_content">Are you sure wanna to exit?</string>
+    <string name="add_note_message">Add Note is pressed</string>
+    <string name="new_note_message">new note button is pressed!</string>
+    <string name="notification_title">Notification Sample</string>
+    <string name="notification_content">Testing new notification button</string>
+    <string name="exiting_message">Exiting application...</string>
+    <string name="exit_cancelling_message">Cancelled</string>
+    <string name="entered_text_message">"Entered text: "</string>
+    <string name="settings_button_message">settings button is pressed!</string>
 </resources>

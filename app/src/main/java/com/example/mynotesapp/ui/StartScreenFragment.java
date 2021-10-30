@@ -10,6 +10,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
@@ -66,9 +67,8 @@ public class StartScreenFragment extends Fragment implements View.OnClickListene
 
         isLand = getResources().getBoolean(R.bool.is_landscape);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createNotificationChannel();
-        }
+        createNotificationChannel();
+
 
     }
 
@@ -104,7 +104,7 @@ public class StartScreenFragment extends Fragment implements View.OnClickListene
     }
 
     private void showSnackBar() {
-        Snackbar.make(requireActivity().findViewById(R.id.add_note), "Add Note is pressed", Snackbar.LENGTH_INDEFINITE)
+        Snackbar.make(requireActivity().findViewById(R.id.add_note), getString(R.string.add_note_message), Snackbar.LENGTH_INDEFINITE)
                 .setAction("OK", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -115,7 +115,7 @@ public class StartScreenFragment extends Fragment implements View.OnClickListene
     }
 
     private void showToast() {
-        Toast.makeText(getActivity(), "new note button is pressed!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), getString(R.string.new_note_message), Toast.LENGTH_SHORT).show();
     }
 
     private void showBottomSheet() {
@@ -125,20 +125,22 @@ public class StartScreenFragment extends Fragment implements View.OnClickListene
     private void showNotification() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(requireActivity(), CHANNEL_ID);
         builder.setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle("Notification Sample")
-                .setContentText("Testing new notification button")
+                .setContentTitle(getString(R.string.notification_title))
+                .setContentText(getString(R.string.notification_content))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
         NotificationManagerCompat.from(requireActivity()).notify(22, builder.build());
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void createNotificationChannel() {
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(requireActivity());
         String name = "Name";
         String descriptionText = "Description";
-        int importance = NotificationManager.IMPORTANCE_DEFAULT;
-        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-        channel.setDescription(descriptionText);
-        NotificationManager notificationManager = (NotificationManager) requireActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.createNotificationChannel(channel);
+        int importance = NotificationManagerCompat.IMPORTANCE_DEFAULT;
+        NotificationChannelCompat.Builder channel = new NotificationChannelCompat.Builder(CHANNEL_ID, importance);
+        channel
+                .setName(name)
+                .setDescription(descriptionText);
+
+        notificationManager.createNotificationChannel(channel.build());
     }
 }

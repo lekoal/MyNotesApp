@@ -13,6 +13,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainer;
+import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
 
@@ -73,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 String textResult = result.getString(MyBottomSheetFragment.TEXT_RESULT);
-                Toast.makeText(MainActivity.this, "Entered text: " + textResult, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, getString(R.string.entered_text_message) + textResult, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -148,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
                     drawer.closeDrawer(GravityCompat.START);
                     return true;
                 } else if (id == R.id.drawer_settings) {
-                    Toast.makeText(getApplicationContext(), "settings button is pressed!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.settings_button_message), Toast.LENGTH_SHORT).show();
                     drawer.closeDrawer(GravityCompat.START);
                     return true;
                 }
@@ -249,8 +251,7 @@ public class MainActivity extends AppCompatActivity {
                         .commit();
             }
         }
-        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) != null &&
-                getSupportFragmentManager().findFragmentById(R.id.fragment_container).getClass().getSimpleName().equals("StartScreenFragment")) {
+        if (Objects.requireNonNull(getSupportFragmentManager().findFragmentById(R.id.fragment_container)).getClass().isInstance(stFr)) {
             showAlertOnExitDialog();
         } else {
             super.onBackPressed();
@@ -314,10 +315,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onContextItemSelected(item);
     }
-
-//    public void onDialogResult(String text) {
-//        Toast.makeText(MainActivity.this, "Entered text: " + text, Toast.LENGTH_SHORT).show();
-//    }
 
     public void showAlertOnExitDialog() {
         new AlertOnExitFragment().show(getSupportFragmentManager(), AlertOnExitFragment.TAG);
