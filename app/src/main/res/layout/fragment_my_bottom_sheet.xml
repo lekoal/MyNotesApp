@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".ui.MyBottomSheetFragment">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic__0211023_100453_2"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_margin"
+        android:text="@string/bottom_dialog_text"
+        android:layout_gravity="center_horizontal" />
+
+    <EditText
+        android:inputType="text"
+        android:id="@+id/bottom_sheet_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginHorizontal="@dimen/big_margin"
+        android:background="@color/bottom_navigation_color" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bottom_sheet_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cornerRadius="@dimen/big_margin"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/show_toast" />
+
+</LinearLayout>

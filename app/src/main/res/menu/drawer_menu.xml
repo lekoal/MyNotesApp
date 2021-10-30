@@ -21,7 +21,7 @@
         android:title="@string/drawer_about" />
 
     <item
-        android:id="@+id/drawer_exit"
+        android:id="@+id/action_exit"
         android:icon="@drawable/ic_baseline_exit_to_app_24"
         android:title="@string/drawer_exit" />
 

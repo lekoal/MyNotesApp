@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/start_screen_button_v_margin"
         android:text="@string/list_of_notes"
-        app:layout_constraintBottom_toTopOf="@id/add_note"
+        app:layout_constraintBottom_toTopOf="@id/show_notification"
         app:layout_constraintEnd_toStartOf="@id/settings"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -38,7 +38,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/about_app"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_list_notes" />
+        app:layout_constraintTop_toBottomOf="@id/show_notification" />
 
     <Button
         android:id="@+id/settings"
@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/start_screen_button_v_margin"
         android:text="@string/settings"
-        app:layout_constraintBottom_toTopOf="@id/about_app"
+        app:layout_constraintBottom_toTopOf="@id/show_notification"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/view_list_notes"
         app:layout_constraintTop_toTopOf="parent" />
@@ -60,6 +60,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/add_note"
-        app:layout_constraintTop_toBottomOf="@id/settings" />
+        app:layout_constraintTop_toBottomOf="@id/show_notification" />
+
+    <Button
+        android:id="@+id/show_notification"
+        android:layout_width="@dimen/start_button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/start_screen_button_v_margin"
+        android:text="@string/show_notification"
+        app:layout_constraintStart_toStartOf="@id/view_list_notes"
+        app:layout_constraintEnd_toEndOf="@id/settings"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

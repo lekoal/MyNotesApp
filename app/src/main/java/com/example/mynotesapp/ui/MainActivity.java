@@ -14,9 +14,12 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentResultListener;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -66,6 +69,14 @@ public class MainActivity extends AppCompatActivity {
         textColor = findViewById(R.id.fragment_container);
         textColorLand = findViewById(R.id.fragment_container_right);
 
+        getSupportFragmentManager().setFragmentResultListener(MyBottomSheetFragment.EXCHANGE_DATA_TAG, this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                String textResult = result.getString(MyBottomSheetFragment.TEXT_RESULT);
+                Toast.makeText(MainActivity.this, "Entered text: " + textResult, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         if (isLand) {
             registerForContextMenu(textColorLand);
         } else {
@@ -84,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                     openAboutFragment();
                     return true;
                 } else if (id == R.id.action_exit) {
-                    finish();
+                    showAlertOnExitDialog();
                     return true;
                 }
                 return false;
@@ -125,8 +136,8 @@ public class MainActivity extends AppCompatActivity {
                     openAboutFragment();
                     drawer.closeDrawer(GravityCompat.START);
                     return true;
-                } else if (id == R.id.drawer_exit) {
-                    finish();
+                } else if (id == R.id.action_exit) {
+                    showAlertOnExitDialog();
                     return true;
                 } else if (id == R.id.drawer_note_list) {
                     openNoteList();
@@ -222,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
             return true;
         } else if (id == R.id.action_exit) {
-            finish();
+            showAlertOnExitDialog();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -238,8 +249,13 @@ public class MainActivity extends AppCompatActivity {
                         .commit();
             }
         }
+        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) != null &&
+                getSupportFragmentManager().findFragmentById(R.id.fragment_container).getClass().getSimpleName().equals("StartScreenFragment")) {
+            showAlertOnExitDialog();
+        } else {
+            super.onBackPressed();
+        }
 
-        super.onBackPressed();
     }
 
     @Override
@@ -297,5 +313,13 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return super.onContextItemSelected(item);
+    }
+
+//    public void onDialogResult(String text) {
+//        Toast.makeText(MainActivity.this, "Entered text: " + text, Toast.LENGTH_SHORT).show();
+//    }
+
+    public void showAlertOnExitDialog() {
+        new AlertOnExitFragment().show(getSupportFragmentManager(), AlertOnExitFragment.TAG);
     }
 }
