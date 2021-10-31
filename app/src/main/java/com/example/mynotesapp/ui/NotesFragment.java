@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -40,6 +41,8 @@ public class NotesFragment extends Fragment implements NotesListView {
     private NotesAdapter adapter;
 
     private ProgressBar progressBar;
+
+    private Button tryAgainButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,7 +86,16 @@ public class NotesFragment extends Fragment implements NotesListView {
 
         progressBar = view.findViewById(R.id.progress_bar);
 
+        tryAgainButton = view.findViewById(R.id.try_again_button);
+
         presenter.requestNotes();
+
+        tryAgainButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.requestNotes();
+            }
+        });
 
         if (isLand) {
             if (!(fragmentManager.findFragmentById(R.id.fragment_container_left) instanceof NotesFragment)) {
@@ -141,6 +153,16 @@ public class NotesFragment extends Fragment implements NotesListView {
     @Override
     public void hideProgress() {
         progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void hideTryAgainButton() {
+        tryAgainButton.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showTryAgainButton() {
+        tryAgainButton.setVisibility(View.VISIBLE);
     }
 
     @Override

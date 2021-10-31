@@ -26,11 +26,13 @@ public class NotesListPresenter {
             public void onSuccess(List<Note> result) {
                 view.showNotes(result);
                 view.hideProgress();
+                view.hideTryAgainButton();
             }
 
             @Override
             public void onError(Throwable error) {
                 view.hideProgress();
+                view.showTryAgainButton();
             }
         });
     }
