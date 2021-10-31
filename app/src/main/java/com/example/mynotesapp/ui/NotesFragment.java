@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.mynotesapp.R;
@@ -37,6 +38,8 @@ public class NotesFragment extends Fragment implements NotesListView {
     private Note selectedNote;
 
     private NotesAdapter adapter;
+
+    private ProgressBar progressBar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,6 +80,8 @@ public class NotesFragment extends Fragment implements NotesListView {
         fragmentManager = getParentFragmentManager();
 
         isLand = getResources().getBoolean(R.bool.is_landscape);
+
+        progressBar = view.findViewById(R.id.progress_bar);
 
         presenter.requestNotes();
 
@@ -129,36 +134,19 @@ public class NotesFragment extends Fragment implements NotesListView {
     }
 
     @Override
-    public void showNotes(List<Note> notes) {
+    public void showProgress() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
 
+    @Override
+    public void hideProgress() {
+        progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showNotes(List<Note> notes) {
         adapter.setNotes(notes);
         adapter.notifyDataSetChanged();
-
- /*       for (Note note : notes) {
-            View itemView = LayoutInflater.from(requireContext()).inflate(R.layout.item_note, notesListRoot, false);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable(ARG_NOTE, note);
-
-                    getParentFragmentManager().setFragmentResult(KEY_NOTES_LIST_ACTIVITY, bundle);
-                }
-            });
-
-            TextView noteTitle = itemView.findViewById(R.id.note_title);
-            noteTitle.setText(note.getTitle());
-
-            TextView noteDate = itemView.findViewById(R.id.note_date);
-            noteDate.setText(note.getDate());
-
-            TextView noteTime = itemView.findViewById(R.id.note_time);
-            noteTime.setText(note.getTime());
-
-            notesListRoot.addView(itemView);
-        } */
     }
 
     @Override

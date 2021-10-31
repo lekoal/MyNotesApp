@@ -18,15 +18,19 @@ public class NotesListPresenter {
     }
 
     public void requestNotes() {
+
+        view.showProgress();
+
         repository.getNotes(new Callback<List<Note>>() {
             @Override
             public void onSuccess(List<Note> result) {
                 view.showNotes(result);
+                view.hideProgress();
             }
 
             @Override
             public void onError(Throwable error) {
-
+                view.hideProgress();
             }
         });
     }
