@@ -28,7 +28,7 @@ import java.util.Objects;
 public class NotesFragment extends Fragment implements NotesListView {
 
     public static final String KEY_NOTES_LIST_ACTIVITY = "KEY_NOTES_LIST_ACTIVITY";
-    private static final String ARG_NOTE = "ARG_NOTE";
+    public static final String ARG_NOTE = "ARG_NOTE";
 
     private NotesListPresenter presenter;
 

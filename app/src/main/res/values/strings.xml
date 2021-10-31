@@ -34,4 +34,10 @@
     <string name="entered_text_message">"Entered text: "</string>
     <string name="settings_button_message">settings button is pressed!</string>
     <string name="try_again">Try again</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="title_name">Title name</string>
+    <string name="date_creation">Date creation</string>
+    <string name="time_creation">Time creation</string>
+    <string name="note_content_some_text">Note content some text</string>
 </resources>

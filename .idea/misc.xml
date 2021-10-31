@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/coreglus/AndroidStudioProjects/MyNotesApp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.3828125" />
+        <entry key="..\:/Users/coreglus/AndroidStudioProjects/MyNotesApp/app/src/main/res/drawable/edit_text_style.xml" value="0.3828125" />
         <entry key="..\:/Users/coreglus/AndroidStudioProjects/MyNotesApp/app/src/main/res/drawable/ic__0211023_100453_2.xml" value="0.3828125" />
         <entry key="..\:/Users/coreglus/AndroidStudioProjects/MyNotesApp/app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.3828125" />
         <entry key="..\:/Users/coreglus/AndroidStudioProjects/MyNotesApp/app/src/main/res/drawable/ic_baseline_format_list_bulleted_24.xml" value="0.3828125" />
@@ -19,6 +20,7 @@
         <entry key="..\:/Users/coreglus/AndroidStudioProjects/MyNotesApp/app/src/main/res/layout/fragment_about.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/coreglus/AndroidStudioProjects/MyNotesApp/app/src/main/res/layout/fragment_alert_on_exit.xml" value="0.35260416666666666" />
         <entry key="..\:/Users/coreglus/AndroidStudioProjects/MyNotesApp/app/src/main/res/layout/fragment_blank.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/coreglus/AndroidStudioProjects/MyNotesApp/app/src/main/res/layout/fragment_edit_note.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/coreglus/AndroidStudioProjects/MyNotesApp/app/src/main/res/layout/fragment_my_bottom_sheet.xml" value="0.35260416666666666" />
         <entry key="..\:/Users/coreglus/AndroidStudioProjects/MyNotesApp/app/src/main/res/layout/fragment_note_details.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/coreglus/AndroidStudioProjects/MyNotesApp/app/src/main/res/layout/fragment_notes.xml" value="0.36666666666666664" />

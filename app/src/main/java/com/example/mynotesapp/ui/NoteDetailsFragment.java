@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
 
 import android.text.method.ScrollingMovementMethod;
@@ -34,6 +35,12 @@ public class NoteDetailsFragment extends Fragment {
     private int selectedMonth = 10;
     private int selectedDayOfMonth = 18;
 
+    FragmentManager fragmentManager;
+
+    EditNoteFragment editNoteFragment;
+
+    private Button editContent;
+
     public static NoteDetailsFragment newInstance(Note note) {
 
         Bundle args = new Bundle();
@@ -59,6 +66,10 @@ public class NoteDetailsFragment extends Fragment {
         TextView noteContent = view.findViewById(R.id.note_content);
         noteContent.setMovementMethod(new ScrollingMovementMethod());
 
+        editContent = view.findViewById(R.id.edit_content);
+
+        fragmentManager = getParentFragmentManager();
+
         if (getArguments() != null && getArguments().containsKey(ARG_NOTE)) {
             Note note = getArguments().getParcelable(ARG_NOTE);
 
@@ -66,6 +77,14 @@ public class NoteDetailsFragment extends Fragment {
             noteDate.setText(note.getDate());
             noteTime.setText(note.getTime());
             noteContent.setText(note.getContent());
+
+            editNoteFragment = new EditNoteFragment(
+                    note.getTitle(),
+                    note.getDate(),
+                    note.getTime(),
+                    note.getContent());
+        } else {
+            editNoteFragment = new EditNoteFragment("null", "null", "null", "null");
         }
 
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -88,6 +107,16 @@ public class NoteDetailsFragment extends Fragment {
             public void onClick(View view) {
                 datePickerDialog.show();
 
+            }
+        });
+
+        editContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fragmentManager.beginTransaction()
+                        .addToBackStack(null)
+                        .replace(R.id.fragment_container, editNoteFragment)
+                        .commit();
             }
         });
     }
