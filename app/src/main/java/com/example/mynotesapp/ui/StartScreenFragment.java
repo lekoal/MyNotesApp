@@ -68,8 +68,6 @@ public class StartScreenFragment extends Fragment implements View.OnClickListene
         isLand = getResources().getBoolean(R.bool.is_landscape);
 
         createNotificationChannel();
-
-
     }
 
     @Override

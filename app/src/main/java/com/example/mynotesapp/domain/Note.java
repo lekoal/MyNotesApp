@@ -12,8 +12,10 @@ public class Note implements Parcelable {
     private String content;
     private String date;
     private String time;
+    private String id;
 
-    public Note(String title, String content) {
+    public Note(String id, String title, String content) {
+        this.id = id;
         this.title = title;
         this.content = content;
         Date dateNow = new Date();
@@ -24,6 +26,7 @@ public class Note implements Parcelable {
     }
 
     protected Note(Parcel in) {
+        id = in.readString();
         title = in.readString();
         content = in.readString();
         date = in.readString();
@@ -62,6 +65,10 @@ public class Note implements Parcelable {
         return title;
     }
 
+    public String getId() {
+        return id;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -69,6 +76,7 @@ public class Note implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
         parcel.writeString(title);
         parcel.writeString(content);
         parcel.writeString(date);
