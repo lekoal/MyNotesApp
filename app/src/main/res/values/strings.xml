@@ -40,4 +40,5 @@
     <string name="date_creation">Date creation</string>
     <string name="time_creation">Time creation</string>
     <string name="note_content_some_text">Note content some text</string>
+    <string name="save_button_message">Save button is pressed</string>
 </resources>

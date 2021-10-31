@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mynotesapp.R;
 import com.example.mynotesapp.domain.Note;
@@ -96,6 +97,7 @@ public class EditNoteFragment extends Fragment {
         String titleChangedText = editTitle.getText().toString();
         String contentChangedText = editContent.getText().toString();
 
+        Toast.makeText(requireActivity(), getString(R.string.save_button_message), Toast.LENGTH_SHORT).show();
 //            selectedNote.setTitle(titleChangedText);
 //            selectedNote.setContent(contentChangedText);
 //
