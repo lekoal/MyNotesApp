@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,8 +28,6 @@ public class NotesFragment extends Fragment implements NotesListView {
     public static final String KEY_NOTES_LIST_ACTIVITY = "KEY_NOTES_LIST_ACTIVITY";
     private static final String ARG_NOTE = "ARG_NOTE";
 
-    private LinearLayout notesListRoot;
-
     private NotesListPresenter presenter;
 
     private boolean isLand;
@@ -36,11 +36,24 @@ public class NotesFragment extends Fragment implements NotesListView {
 
     private Note selectedNote;
 
+    private NotesAdapter adapter;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         presenter = new NotesListPresenter(this, new CreatedNotesRepository());
+
+        adapter = new NotesAdapter();
+        adapter.setNoteClicked(new NotesAdapter.OnNoteClicked() {
+            @Override
+            public void onNoteClicked(Note note) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(ARG_NOTE, note);
+
+                getParentFragmentManager().setFragmentResult(KEY_NOTES_LIST_ACTIVITY, bundle);
+            }
+        });
     }
 
     @Nullable
@@ -53,7 +66,13 @@ public class NotesFragment extends Fragment implements NotesListView {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        notesListRoot = view.findViewById(R.id.notes_root);
+        RecyclerView notesList = view.findViewById(R.id.notes_root);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
+
+        notesList.setLayoutManager(layoutManager);
+
+        notesList.setAdapter(adapter);
 
         fragmentManager = getParentFragmentManager();
 
@@ -112,7 +131,10 @@ public class NotesFragment extends Fragment implements NotesListView {
     @Override
     public void showNotes(List<Note> notes) {
 
-        for (Note note : notes) {
+        adapter.setNotes(notes);
+        adapter.notifyDataSetChanged();
+
+ /*       for (Note note : notes) {
             View itemView = LayoutInflater.from(requireContext()).inflate(R.layout.item_note, notesListRoot, false);
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -136,7 +158,7 @@ public class NotesFragment extends Fragment implements NotesListView {
             noteTime.setText(note.getTime());
 
             notesListRoot.addView(itemView);
-        }
+        } */
     }
 
     @Override
