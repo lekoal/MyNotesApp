@@ -40,17 +40,18 @@ public class EditNoteFragment extends Fragment {
     private Button cancel;
     private Button save;
 
-    Note selectedNote;
+    private final Note selectedNote;
 
     private boolean isLand;
 
     private FragmentManager fragmentManager;
 
-    public EditNoteFragment(String title, String date, String time, String content) {
-        this.title = title;
-        this.date = date;
-        this.time = time;
-        this.content = content;
+    public EditNoteFragment(Note note) {
+        this.title = note.getTitle();
+        this.date = note.getDate();
+        this.time = note.getTime();
+        this.content = note.getContent();
+        this.selectedNote = note;
     }
 
     @Nullable
@@ -113,13 +114,30 @@ public class EditNoteFragment extends Fragment {
 
         Toast.makeText(requireActivity(), getString(R.string.save_button_message), Toast.LENGTH_SHORT).show();
 
-//
-//        note.setTitle(titleChangedText);
-//        note.setContent(contentChangedText);
-//
-//        fragmentManager.beginTransaction()
-//                .replace(R.id.fragment_container, this)
-//                .addToBackStack(null)
-//                .commit();
+        selectedNote.setTitle(titleChangedText);
+        selectedNote.setContent(contentChangedText);
+
+        NoteDetailsFragment detailsFragment = NoteDetailsFragment.newInstance(selectedNote);
+        if (isLand) {
+            removeInPrimContIfNotEmpty();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container_right, detailsFragment)
+                    .addToBackStack(null)
+                    .commit();
+        } else {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, detailsFragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
+    }
+
+    private void removeInPrimContIfNotEmpty() {
+        if (fragmentManager.findFragmentById(R.id.fragment_container_right) != null) {
+            fragmentManager.beginTransaction()
+                    .addToBackStack(null)
+                    .remove(Objects.requireNonNull(fragmentManager.findFragmentById(R.id.fragment_container_right)))
+                    .commit();
+        }
     }
 }

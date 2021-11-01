@@ -44,8 +44,9 @@ public class NoteDetailsFragment extends Fragment {
 
     private boolean isLand;
 
-    public static NoteDetailsFragment newInstance(Note note) {
+    Note selectedNote;
 
+    public static NoteDetailsFragment newInstance(Note note) {
         Bundle args = new Bundle();
         args.putParcelable(ARG_NOTE, note);
         NoteDetailsFragment fragment = new NoteDetailsFragment();
@@ -76,20 +77,13 @@ public class NoteDetailsFragment extends Fragment {
         fragmentManager = getParentFragmentManager();
 
         if (getArguments() != null && getArguments().containsKey(ARG_NOTE)) {
-            Note note = getArguments().getParcelable(ARG_NOTE);
+            selectedNote = getArguments().getParcelable(ARG_NOTE);
+            noteTitle.setText(selectedNote.getTitle());
+            noteDate.setText(selectedNote.getDate());
+            noteTime.setText(selectedNote.getTime());
+            noteContent.setText(selectedNote.getContent());
 
-            noteTitle.setText(note.getTitle());
-            noteDate.setText(note.getDate());
-            noteTime.setText(note.getTime());
-            noteContent.setText(note.getContent());
-
-            editNoteFragment = new EditNoteFragment(
-                    note.getTitle(),
-                    note.getDate(),
-                    note.getTime(),
-                    note.getContent());
-        } else {
-            editNoteFragment = new EditNoteFragment("null", "null", "null", "null");
+            editNoteFragment = new EditNoteFragment(selectedNote);
         }
 
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -118,16 +112,17 @@ public class NoteDetailsFragment extends Fragment {
         editContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isLand) {
-                    removeInPrimContIfNotEmpty();
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container_right, editNoteFragment)
-                            .commit();
-                } else {
-                    fragmentManager.beginTransaction()
-                            .addToBackStack(null)
-                            .replace(R.id.fragment_container, editNoteFragment)
-                            .commit();
+
+                    if (isLand) {
+                        removeInPrimContIfNotEmpty();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.fragment_container_right, editNoteFragment)
+                                .commit();
+                    } else {
+                        fragmentManager.beginTransaction()
+                                .addToBackStack(null)
+                                .replace(R.id.fragment_container, editNoteFragment)
+                                .commit();
                 }
             }
         });
