@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentResultListener;
 
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -19,6 +20,8 @@ import android.widget.Toast;
 
 import com.example.mynotesapp.R;
 import com.example.mynotesapp.domain.Note;
+
+import java.util.Objects;
 
 public class EditNoteFragment extends Fragment {
 
@@ -37,9 +40,11 @@ public class EditNoteFragment extends Fragment {
     private Button cancel;
     private Button save;
 
-    private FragmentManager fragmentManager;
+    Note selectedNote;
 
-    private Note selectedNote;
+    private boolean isLand;
+
+    private FragmentManager fragmentManager;
 
     public EditNoteFragment(String title, String date, String time, String content) {
         this.title = title;
@@ -69,6 +74,8 @@ public class EditNoteFragment extends Fragment {
         cancel = view.findViewById(R.id.edit_button_cancel);
         save = view.findViewById(R.id.edit_button_save);
 
+        isLand = getResources().getBoolean(R.bool.is_landscape);
+
         editTitle.setText(title);
         noteTime.setText(time);
         noteDate.setText(date);
@@ -90,6 +97,13 @@ public class EditNoteFragment extends Fragment {
     }
 
     private void onCancelled() {
+        if (isLand) {
+            if (fragmentManager.findFragmentById(R.id.fragment_container_right) != null) {
+                fragmentManager.beginTransaction()
+                        .remove(Objects.requireNonNull(fragmentManager.findFragmentById(R.id.fragment_container_right)))
+                        .commit();
+            }
+        }
         fragmentManager.popBackStack();
     }
 
@@ -98,14 +112,14 @@ public class EditNoteFragment extends Fragment {
         String contentChangedText = editContent.getText().toString();
 
         Toast.makeText(requireActivity(), getString(R.string.save_button_message), Toast.LENGTH_SHORT).show();
-//            selectedNote.setTitle(titleChangedText);
-//            selectedNote.setContent(contentChangedText);
+
 //
-//            NoteDetailsFragment detailsFragment = NoteDetailsFragment.newInstance(selectedNote);
+//        note.setTitle(titleChangedText);
+//        note.setContent(contentChangedText);
 //
-//            fragmentManager.beginTransaction()
-//                    .replace(R.id.fragment_container, detailsFragment)
-//                    .addToBackStack(null)
-//                    .commit();
+//        fragmentManager.beginTransaction()
+//                .replace(R.id.fragment_container, this)
+//                .addToBackStack(null)
+//                .commit();
     }
 }

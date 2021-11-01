@@ -23,6 +23,7 @@ import com.example.mynotesapp.R;
 import com.example.mynotesapp.domain.Note;
 
 import java.util.Calendar;
+import java.util.Objects;
 
 public class NoteDetailsFragment extends Fragment {
 
@@ -40,6 +41,8 @@ public class NoteDetailsFragment extends Fragment {
     EditNoteFragment editNoteFragment;
 
     private Button editContent;
+
+    private boolean isLand;
 
     public static NoteDetailsFragment newInstance(Note note) {
 
@@ -67,6 +70,8 @@ public class NoteDetailsFragment extends Fragment {
         noteContent.setMovementMethod(new ScrollingMovementMethod());
 
         editContent = view.findViewById(R.id.edit_content);
+
+        isLand = getResources().getBoolean(R.bool.is_landscape);
 
         fragmentManager = getParentFragmentManager();
 
@@ -113,11 +118,27 @@ public class NoteDetailsFragment extends Fragment {
         editContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fragmentManager.beginTransaction()
-                        .addToBackStack(null)
-                        .replace(R.id.fragment_container, editNoteFragment)
-                        .commit();
+                if (isLand) {
+                    removeInPrimContIfNotEmpty();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container_right, editNoteFragment)
+                            .commit();
+                } else {
+                    fragmentManager.beginTransaction()
+                            .addToBackStack(null)
+                            .replace(R.id.fragment_container, editNoteFragment)
+                            .commit();
+                }
             }
         });
+    }
+
+    private void removeInPrimContIfNotEmpty() {
+        if (fragmentManager.findFragmentById(R.id.fragment_container_right) != null) {
+            fragmentManager.beginTransaction()
+                    .addToBackStack(null)
+                    .remove(Objects.requireNonNull(fragmentManager.findFragmentById(R.id.fragment_container_right)))
+                    .commit();
+        }
     }
 }

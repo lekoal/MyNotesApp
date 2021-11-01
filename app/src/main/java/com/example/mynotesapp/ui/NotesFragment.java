@@ -137,8 +137,8 @@ public class NotesFragment extends Fragment implements NotesListView {
                             .commit();
                 } else {
                     fragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, detailsFragment)
                             .addToBackStack(null)
+                            .replace(R.id.fragment_container, detailsFragment)
                             .commit();
                 }
             }
