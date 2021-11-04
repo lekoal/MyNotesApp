@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
 
 import android.text.method.ScrollingMovementMethod;
@@ -22,6 +23,7 @@ import com.example.mynotesapp.R;
 import com.example.mynotesapp.domain.Note;
 
 import java.util.Calendar;
+import java.util.Objects;
 
 public class NoteDetailsFragment extends Fragment {
 
@@ -34,8 +36,17 @@ public class NoteDetailsFragment extends Fragment {
     private int selectedMonth = 10;
     private int selectedDayOfMonth = 18;
 
-    public static NoteDetailsFragment newInstance(Note note) {
+    FragmentManager fragmentManager;
 
+    EditNoteFragment editNoteFragment;
+
+    private Button editContent;
+
+    private boolean isLand;
+
+    Note selectedNote;
+
+    public static NoteDetailsFragment newInstance(Note note) {
         Bundle args = new Bundle();
         args.putParcelable(ARG_NOTE, note);
         NoteDetailsFragment fragment = new NoteDetailsFragment();
@@ -59,13 +70,20 @@ public class NoteDetailsFragment extends Fragment {
         TextView noteContent = view.findViewById(R.id.note_content);
         noteContent.setMovementMethod(new ScrollingMovementMethod());
 
-        if (getArguments() != null && getArguments().containsKey(ARG_NOTE)) {
-            Note note = getArguments().getParcelable(ARG_NOTE);
+        editContent = view.findViewById(R.id.edit_content);
 
-            noteTitle.setText(note.getTitle());
-            noteDate.setText(note.getDate());
-            noteTime.setText(note.getTime());
-            noteContent.setText(note.getContent());
+        isLand = getResources().getBoolean(R.bool.is_landscape);
+
+        fragmentManager = getParentFragmentManager();
+
+        if (getArguments() != null && getArguments().containsKey(ARG_NOTE)) {
+            selectedNote = getArguments().getParcelable(ARG_NOTE);
+            noteTitle.setText(selectedNote.getTitle());
+            noteDate.setText(selectedNote.getDate());
+            noteTime.setText(selectedNote.getTime());
+            noteContent.setText(selectedNote.getContent());
+
+            editNoteFragment = new EditNoteFragment(selectedNote);
         }
 
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -90,5 +108,32 @@ public class NoteDetailsFragment extends Fragment {
 
             }
         });
+
+        editContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                    if (isLand) {
+                        removeInPrimContIfNotEmpty();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.fragment_container_right, editNoteFragment)
+                                .commit();
+                    } else {
+                        fragmentManager.beginTransaction()
+                                .addToBackStack(null)
+                                .replace(R.id.fragment_container, editNoteFragment)
+                                .commit();
+                }
+            }
+        });
+    }
+
+    private void removeInPrimContIfNotEmpty() {
+        if (fragmentManager.findFragmentById(R.id.fragment_container_right) != null) {
+            fragmentManager.beginTransaction()
+                    .addToBackStack(null)
+                    .remove(Objects.requireNonNull(fragmentManager.findFragmentById(R.id.fragment_container_right)))
+                    .commit();
+        }
     }
 }

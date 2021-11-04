@@ -7,11 +7,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.mynotesapp.R;
@@ -24,9 +28,7 @@ import java.util.Objects;
 public class NotesFragment extends Fragment implements NotesListView {
 
     public static final String KEY_NOTES_LIST_ACTIVITY = "KEY_NOTES_LIST_ACTIVITY";
-    private static final String ARG_NOTE = "ARG_NOTE";
-
-    private LinearLayout notesListRoot;
+    public static final String ARG_NOTE = "ARG_NOTE";
 
     private NotesListPresenter presenter;
 
@@ -36,11 +38,28 @@ public class NotesFragment extends Fragment implements NotesListView {
 
     private Note selectedNote;
 
+    private NotesAdapter adapter;
+
+    private ProgressBar progressBar;
+
+    private Button tryAgainButton;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         presenter = new NotesListPresenter(this, new CreatedNotesRepository());
+
+        adapter = new NotesAdapter();
+        adapter.setNoteClicked(new NotesAdapter.OnNoteClicked() {
+            @Override
+            public void onNoteClicked(Note note) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(ARG_NOTE, note);
+
+                getParentFragmentManager().setFragmentResult(KEY_NOTES_LIST_ACTIVITY, bundle);
+            }
+        });
     }
 
     @Nullable
@@ -53,13 +72,30 @@ public class NotesFragment extends Fragment implements NotesListView {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        notesListRoot = view.findViewById(R.id.notes_root);
+        RecyclerView notesList = view.findViewById(R.id.notes_root);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
+
+        notesList.setLayoutManager(layoutManager);
+
+        notesList.setAdapter(adapter);
 
         fragmentManager = getParentFragmentManager();
 
         isLand = getResources().getBoolean(R.bool.is_landscape);
 
+        progressBar = view.findViewById(R.id.progress_bar);
+
+        tryAgainButton = view.findViewById(R.id.try_again_button);
+
         presenter.requestNotes();
+
+        tryAgainButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.requestNotes();
+            }
+        });
 
         if (isLand) {
             if (!(fragmentManager.findFragmentById(R.id.fragment_container_left) instanceof NotesFragment)) {
@@ -101,8 +137,8 @@ public class NotesFragment extends Fragment implements NotesListView {
                             .commit();
                 } else {
                     fragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, detailsFragment)
                             .addToBackStack(null)
+                            .replace(R.id.fragment_container, detailsFragment)
                             .commit();
                 }
             }
@@ -110,33 +146,29 @@ public class NotesFragment extends Fragment implements NotesListView {
     }
 
     @Override
+    public void showProgress() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgress() {
+        progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void hideTryAgainButton() {
+        tryAgainButton.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showTryAgainButton() {
+        tryAgainButton.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public void showNotes(List<Note> notes) {
-
-        for (Note note : notes) {
-            View itemView = LayoutInflater.from(requireContext()).inflate(R.layout.item_note, notesListRoot, false);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable(ARG_NOTE, note);
-
-                    getParentFragmentManager().setFragmentResult(KEY_NOTES_LIST_ACTIVITY, bundle);
-                }
-            });
-
-            TextView noteTitle = itemView.findViewById(R.id.note_title);
-            noteTitle.setText(note.getTitle());
-
-            TextView noteDate = itemView.findViewById(R.id.note_date);
-            noteDate.setText(note.getDate());
-
-            TextView noteTime = itemView.findViewById(R.id.note_time);
-            noteTime.setText(note.getTime());
-
-            notesListRoot.addView(itemView);
-        }
+        adapter.setNotes(notes);
+        adapter.notifyDataSetChanged();
     }
 
     @Override

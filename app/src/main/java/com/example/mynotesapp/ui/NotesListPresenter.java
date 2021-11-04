@@ -1,6 +1,10 @@
 package com.example.mynotesapp.ui;
 
+import com.example.mynotesapp.domain.Note;
+import com.example.mynotesapp.storage.Callback;
 import com.example.mynotesapp.storage.NotesRepository;
+
+import java.util.List;
 
 public class NotesListPresenter {
 
@@ -14,6 +18,22 @@ public class NotesListPresenter {
     }
 
     public void requestNotes() {
-        view.showNotes(repository.getNotes());
+
+        view.showProgress();
+
+        repository.getNotes(new Callback<List<Note>>() {
+            @Override
+            public void onSuccess(List<Note> result) {
+                view.showNotes(result);
+                view.hideProgress();
+                view.hideTryAgainButton();
+            }
+
+            @Override
+            public void onError(Throwable error) {
+                view.hideProgress();
+                view.showTryAgainButton();
+            }
+        });
     }
 }

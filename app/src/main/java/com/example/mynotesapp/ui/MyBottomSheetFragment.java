@@ -2,6 +2,8 @@ package com.example.mynotesapp.ui;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -26,7 +28,6 @@ public class MyBottomSheetFragment extends BottomSheetDialogFragment {
 
         customView.findViewById(R.id.bottom_sheet_button).setOnClickListener(view -> {
             String text = customView.<EditText>findViewById(R.id.bottom_sheet_edit_text).getText().toString();
-//            ((MainActivity) requireActivity()).onDialogResult(text);
             Bundle bundle = new Bundle();
             bundle.putString(TEXT_RESULT, text);
             getParentFragmentManager().setFragmentResult(EXCHANGE_DATA_TAG, bundle);
