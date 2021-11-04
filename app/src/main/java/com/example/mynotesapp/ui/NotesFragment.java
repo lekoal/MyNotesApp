@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -48,6 +49,8 @@ public class NotesFragment extends Fragment implements NotesListView {
     private ProgressBar progressBar;
 
     private Button tryAgainButton;
+
+    private Note selectedNoteDetails;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,7 +105,6 @@ public class NotesFragment extends Fragment implements NotesListView {
         tryAgainButton = view.findViewById(R.id.try_again_button);
 
         presenter.requestNotes();
-
 
         tryAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override

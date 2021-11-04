@@ -29,7 +29,8 @@ public class NoteDetailsFragment extends Fragment {
 
     private static final String ARG_NOTE = "ARG_NOTE";
 
-    public static final String KEY_NOTES_LIST_DETAILS = "KEY_NOTES_LIST_DETAILS";
+    public static final String ARG_NOTE_FOR_DELETE = "ARG_NOTE_FOR_DELETE";
+    public static final String DELETE_RESULT = "DELETE_RESULT";
 
     private String newDate;
     private int selectedYear = 2021;
@@ -113,17 +114,26 @@ public class NoteDetailsFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                    if (isLand) {
-                        removeInPrimContIfNotEmpty();
-                        fragmentManager.beginTransaction()
-                                .replace(R.id.fragment_container_right, editNoteFragment)
-                                .commit();
-                    } else {
-                        fragmentManager.beginTransaction()
-                                .addToBackStack(null)
-                                .replace(R.id.fragment_container, editNoteFragment)
-                                .commit();
+                if (isLand) {
+                    removeInPrimContIfNotEmpty();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container_right, editNoteFragment)
+                            .commit();
+                } else {
+                    fragmentManager.beginTransaction()
+                            .addToBackStack(null)
+                            .replace(R.id.fragment_container, editNoteFragment)
+                            .commit();
                 }
+            }
+        });
+
+        Button deleteNote = view.findViewById(R.id.delete_note);
+
+        deleteNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(requireContext(), "Delete key is  pressed", Toast.LENGTH_SHORT).show();
             }
         });
     }
