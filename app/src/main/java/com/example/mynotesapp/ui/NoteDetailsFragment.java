@@ -36,15 +36,15 @@ public class NoteDetailsFragment extends Fragment {
     private int selectedMonth = 10;
     private int selectedDayOfMonth = 18;
 
-    FragmentManager fragmentManager;
+    private FragmentManager fragmentManager;
 
-    EditNoteFragment editNoteFragment;
+    private EditNoteFragment editNoteFragment;
 
     private Button editContent;
 
     private boolean isLand;
 
-    Note selectedNote;
+    private Note selectedNote;
 
     public static NoteDetailsFragment newInstance(Note note) {
         Bundle args = new Bundle();
@@ -83,7 +83,7 @@ public class NoteDetailsFragment extends Fragment {
             noteTime.setText(selectedNote.getTime());
             noteContent.setText(selectedNote.getContent());
 
-            editNoteFragment = new EditNoteFragment(selectedNote);
+            editNoteFragment = EditNoteFragment.newInstance(selectedNote);
         }
 
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {

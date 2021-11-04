@@ -26,11 +26,16 @@ import java.util.Objects;
 public class EditNoteFragment extends Fragment {
 
     private static final String ARG_NOTE = "ARG_NOTE";
+    public static final String KEY_RESULT = "KEY_RESULT";
+    public static final String ARG_TITLE = "ARG_TITLE";
+    public static final String ARG_CONTENT = "ARG_CONTENT";
+    public static final String ARG_ID = "ARG_ID";
 
-    private final String title;
-    private final String date;
-    private final String time;
-    private final String content;
+    private String title;
+    private String id;
+    private String date;
+    private String time;
+    private String content;
 
     private EditText editTitle;
     private TextView noteTime;
@@ -40,18 +45,16 @@ public class EditNoteFragment extends Fragment {
     private Button cancel;
     private Button save;
 
-    private final Note selectedNote;
-
     private boolean isLand;
 
     private FragmentManager fragmentManager;
 
-    public EditNoteFragment(Note note) {
-        this.title = note.getTitle();
-        this.date = note.getDate();
-        this.time = note.getTime();
-        this.content = note.getContent();
-        this.selectedNote = note;
+    public static EditNoteFragment newInstance(Note note) {
+        EditNoteFragment fragment = new EditNoteFragment();
+        Bundle arguments = new Bundle();
+        arguments.putParcelable(ARG_NOTE, note);
+        fragment.setArguments(arguments);
+        return fragment;
     }
 
     @Nullable
@@ -64,10 +67,21 @@ public class EditNoteFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Note note = requireArguments().getParcelable(ARG_NOTE);
+
+        id = note.getId();
+        date = note.getDate();
+        time = note.getTime();
+        title = note.getTitle();
+        content = note.getContent();
+
         editTitle = view.findViewById(R.id.edit_title_text);
+
         noteDate = view.findViewById(R.id.note_date);
         noteTime = view.findViewById(R.id.note_time);
+
         editContent = view.findViewById(R.id.edit_content_text);
+
         editContent.setMovementMethod(new ScrollingMovementMethod());
 
         fragmentManager = getParentFragmentManager();
@@ -112,21 +126,24 @@ public class EditNoteFragment extends Fragment {
         String titleChangedText = editTitle.getText().toString();
         String contentChangedText = editContent.getText().toString();
 
-        Toast.makeText(requireActivity(), getString(R.string.save_button_message), Toast.LENGTH_SHORT).show();
+        Bundle bundle = new Bundle();
+        bundle.putString(ARG_ID, id);
+        bundle.putString(ARG_TITLE, titleChangedText);
+        bundle.putString(ARG_CONTENT, contentChangedText);
 
-        selectedNote.setTitle(titleChangedText);
-        selectedNote.setContent(contentChangedText);
+        getParentFragmentManager().setFragmentResult(KEY_RESULT, bundle);
 
-        NoteDetailsFragment detailsFragment = NoteDetailsFragment.newInstance(selectedNote);
+
+        NotesFragment notesFragment = new NotesFragment();
         if (isLand) {
             removeInPrimContIfNotEmpty();
             fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container_right, detailsFragment)
+                    .replace(R.id.fragment_container_right, notesFragment)
                     .addToBackStack(null)
                     .commit();
         } else {
             fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, detailsFragment)
+                    .replace(R.id.fragment_container, notesFragment)
                     .addToBackStack(null)
                     .commit();
         }

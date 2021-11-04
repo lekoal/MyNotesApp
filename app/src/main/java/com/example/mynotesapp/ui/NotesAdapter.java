@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mynotesapp.R;
@@ -18,17 +19,47 @@ import java.util.List;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
 
+    public int deleteNote(Note selectedNoteContext) {
+        int index = notes.indexOf(selectedNoteContext);
+        notes.remove(index);
+        return index;
+    }
+
+    public int updateNote(Note result) {
+        int index = -1;
+        for (int i = 0; i < notes.size(); i++) {
+            if (notes.get(i).getId().equals(result.getId())) {
+                index = i;
+                break;
+            }
+        }
+        notes.set(index, result);
+        return index;
+    }
+
     interface OnNoteClicked {
         void onNoteClicked(Note note);
+
+        void onNoteLongClicked(View itemView, Note note);
     }
 
     private final List<Note> notes = new ArrayList<>();
 
     private OnNoteClicked noteClicked;
 
+    private Fragment fragment;
+
+    public NotesAdapter(Fragment fragment) {
+        this.fragment = fragment;
+    }
+
     public void setNotes(Collection<Note> toSet) {
         notes.clear();
         notes.addAll(toSet);
+    }
+
+    public void addNote(Note result) {
+        notes.add(result);
     }
 
     @NonNull
@@ -81,12 +112,24 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         public NoteViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            fragment.registerForContextMenu(itemView);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (getNoteClicked() != null) {
                         getNoteClicked().onNoteClicked(notes.get(getAdapterPosition()));
                     }
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    if (getNoteClicked() != null) {
+                        getNoteClicked().onNoteLongClicked(view, notes.get(getAdapterPosition()));
+                    }
+                    return true;
                 }
             });
 
