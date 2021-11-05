@@ -51,6 +51,8 @@ public class NotesFragment extends Fragment implements NotesListView {
 
     private Button tryAgainButton;
 
+    private int nameCount;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -230,22 +232,24 @@ public class NotesFragment extends Fragment implements NotesListView {
 
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        nameCount = 0;
         MenuItem clear = menu.findItem(R.id.action_clear);
         clear.setVisible(true);
         clear.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 presenter.removeAll();
+                nameCount = 0;
                 return false;
             }
         });
-
         MenuItem add = menu.findItem(R.id.action_add);
         add.setVisible(true);
         add.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                presenter.add("New note", "Note content");
+                nameCount++;
+                presenter.add("New note " + nameCount, "Note content");
                 return false;
             }
         });
