@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.example.mynotesapp.R;
 import com.example.mynotesapp.domain.Note;
 import com.example.mynotesapp.storage.CreatedNotesRepository;
+import com.example.mynotesapp.storage.FireStoreNotesRepository;
 import com.example.mynotesapp.storage.SharedPrefNoteRepository;
 
 import java.util.Collections;
@@ -59,7 +60,7 @@ public class NotesFragment extends Fragment implements NotesListView {
 
         setHasOptionsMenu(true);
 
-        presenter = new NotesListPresenter(this, new SharedPrefNoteRepository(requireActivity().getApplicationContext()));
+        presenter = new NotesListPresenter(this, new FireStoreNotesRepository());
 
         adapter = new NotesAdapter(this);
         adapter.setNoteClicked(new NotesAdapter.OnNoteClicked() {
