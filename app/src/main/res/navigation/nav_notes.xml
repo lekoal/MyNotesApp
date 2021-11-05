@@ -12,10 +12,17 @@
         tools:layout="@layout/fragment_start_screen" >
         <action
             android:id="@+id/action_startScreenFragment_to_notesFragment"
-            app:destination="@id/notesFragment" />
+            app:destination="@id/notesFragment"
+            app:popUpTo="@id/startScreenFragment"
+            app:enterAnim="@anim/nav_default_enter_anim" />
         <action
             android:id="@+id/action_startScreenFragment_to_aboutFragment"
-            app:destination="@id/aboutFragment" />
+            app:destination="@id/aboutFragment"
+            app:popUpTo="@id/startScreenFragment" />
+        <action
+            android:id="@+id/action_startScreenFragment_to_myBottomSheetFragment"
+            app:destination="@id/myBottomSheetFragment"
+            app:popUpTo="@id/startScreenFragment" />
     </fragment>
     <fragment
         android:id="@+id/aboutFragment"
@@ -28,10 +35,12 @@
         android:label="NotesFragment" >
         <action
             android:id="@+id/action_notesFragment_to_noteDetailsFragment"
-            app:destination="@id/noteDetailsFragment" />
+            app:destination="@id/noteDetailsFragment"
+            app:popUpTo="@id/notesFragment" />
         <action
             android:id="@+id/action_notesFragment_to_editNoteFragment"
-            app:destination="@id/editNoteFragment" />
+            app:destination="@id/editNoteFragment"
+            app:popUpTo="@id/notesFragment" />
     </fragment>
     <fragment
         android:id="@+id/noteDetailsFragment"
@@ -39,11 +48,17 @@
         android:label="NoteDetailsFragment" >
         <action
             android:id="@+id/action_noteDetailsFragment_to_editNoteFragment"
-            app:destination="@id/editNoteFragment" />
+            app:destination="@id/editNoteFragment"
+            app:popUpTo="@id/notesFragment" />
     </fragment>
     <fragment
         android:id="@+id/editNoteFragment"
         android:name="com.example.mynotesapp.ui.EditNoteFragment"
         android:label="fragment_edit_note"
         tools:layout="@layout/fragment_edit_note" />
+    <fragment
+        android:id="@+id/myBottomSheetFragment"
+        android:name="com.example.mynotesapp.ui.MyBottomSheetFragment"
+        android:label="fragment_my_bottom_sheet"
+        tools:layout="@layout/fragment_my_bottom_sheet" />
 </navigation>

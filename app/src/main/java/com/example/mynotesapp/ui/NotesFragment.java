@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.example.mynotesapp.R;
 import com.example.mynotesapp.domain.Note;
 import com.example.mynotesapp.storage.CreatedNotesRepository;
+import com.example.mynotesapp.storage.SharedPrefNoteRepository;
 
 import java.util.Collections;
 import java.util.List;
@@ -50,15 +51,13 @@ public class NotesFragment extends Fragment implements NotesListView {
 
     private Button tryAgainButton;
 
-    private Note selectedNoteDetails;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
 
-        presenter = new NotesListPresenter(this, new CreatedNotesRepository());
+        presenter = new NotesListPresenter(this, new SharedPrefNoteRepository(requireActivity().getApplicationContext()));
 
         adapter = new NotesAdapter(this);
         adapter.setNoteClicked(new NotesAdapter.OnNoteClicked() {
