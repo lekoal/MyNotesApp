@@ -26,6 +26,11 @@ import com.example.mynotesapp.domain.Note;
 import com.example.mynotesapp.storage.CreatedNotesRepository;
 import com.example.mynotesapp.storage.FireStoreNotesRepository;
 import com.example.mynotesapp.storage.SharedPrefNoteRepository;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Collections;
 import java.util.List;
@@ -52,7 +57,7 @@ public class NotesFragment extends Fragment implements NotesListView {
 
     private Button tryAgainButton;
 
-    private int nameCount;
+    private int nameCount = 0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -233,7 +238,6 @@ public class NotesFragment extends Fragment implements NotesListView {
 
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        nameCount = 0;
         MenuItem clear = menu.findItem(R.id.action_clear);
         clear.setVisible(true);
         clear.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
