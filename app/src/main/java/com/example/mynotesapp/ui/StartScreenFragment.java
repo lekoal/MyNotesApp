@@ -86,20 +86,9 @@ public class StartScreenFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         if (v.getId() == R.id.view_list_notes) {
 
-            if (isLand) {
-                removeInPrimContIfNotEmpty();
-                fragmentManager.beginTransaction()
-                        .addToBackStack(null)
-                        .replace(R.id.fragment_container_left, notesFr)
-                        .commit();
-            } else {
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_startScreenFragment_to_authFragment);
 
-
-                fragmentManager.beginTransaction()
-                        .addToBackStack(null)
-                        .replace(R.id.fragment_container, notesFr)
-                        .commit();
-            }
         } else if (v.getId() == R.id.about_app) {
             fragmentManager.beginTransaction()
                     .addToBackStack(null)
