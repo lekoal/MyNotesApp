@@ -10,6 +10,8 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,9 +34,11 @@ public class StartScreenFragment extends Fragment implements View.OnClickListene
 
     private static final String CHANNEL_ID = "CHANNEL_ID";
 
-    private int selectedYear = Calendar.getInstance().get(Calendar.YEAR);;
-    private int selectedMonth = Calendar.getInstance().get(Calendar.MONTH);;
-    private int selectedDayOfMonth = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);;
+    private int selectedYear = Calendar.getInstance().get(Calendar.YEAR);
+    ;
+    private int selectedMonth = Calendar.getInstance().get(Calendar.MONTH);
+    ;
+    private int selectedDayOfMonth = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 
     private DatePickerDialog datePickerDialog;
 
@@ -81,18 +85,10 @@ public class StartScreenFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.view_list_notes) {
-            if (isLand) {
-                removeInPrimContIfNotEmpty();
-                fragmentManager.beginTransaction()
-                        .addToBackStack(null)
-                        .replace(R.id.fragment_container_left, notesFr)
-                        .commit();
-            } else {
-                fragmentManager.beginTransaction()
-                        .addToBackStack(null)
-                        .replace(R.id.fragment_container, notesFr)
-                        .commit();
-            }
+
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_startScreenFragment_to_authFragment);
+
         } else if (v.getId() == R.id.about_app) {
             fragmentManager.beginTransaction()
                     .addToBackStack(null)

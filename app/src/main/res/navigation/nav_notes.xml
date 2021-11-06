@@ -9,13 +9,19 @@
         android:id="@+id/startScreenFragment"
         android:name="com.example.mynotesapp.ui.StartScreenFragment"
         android:label="fragment_start_screen"
-        tools:layout="@layout/fragment_start_screen" >
-        <action
-            android:id="@+id/action_startScreenFragment_to_notesFragment"
-            app:destination="@id/notesFragment" />
+        tools:layout="@layout/fragment_start_screen">
         <action
             android:id="@+id/action_startScreenFragment_to_aboutFragment"
-            app:destination="@id/aboutFragment" />
+            app:destination="@id/aboutFragment"
+            app:popUpTo="@id/startScreenFragment" />
+        <action
+            android:id="@+id/action_startScreenFragment_to_myBottomSheetFragment"
+            app:destination="@id/myBottomSheetFragment"
+            app:popUpTo="@id/startScreenFragment" />
+        <action
+            android:id="@+id/action_startScreenFragment_to_authFragment"
+            app:destination="@id/authFragment"
+            app:popUpTo="@id/startScreenFragment" />
     </fragment>
     <fragment
         android:id="@+id/aboutFragment"
@@ -25,25 +31,44 @@
     <fragment
         android:id="@+id/notesFragment"
         android:name="com.example.mynotesapp.ui.NotesFragment"
-        android:label="NotesFragment" >
+        android:label="NotesFragment">
         <action
             android:id="@+id/action_notesFragment_to_noteDetailsFragment"
-            app:destination="@id/noteDetailsFragment" />
+            app:destination="@id/noteDetailsFragment"
+            app:popUpTo="@id/notesFragment" />
         <action
             android:id="@+id/action_notesFragment_to_editNoteFragment"
-            app:destination="@id/editNoteFragment" />
+            app:destination="@id/editNoteFragment"
+            app:popUpTo="@id/notesFragment" />
     </fragment>
     <fragment
         android:id="@+id/noteDetailsFragment"
         android:name="com.example.mynotesapp.ui.NoteDetailsFragment"
-        android:label="NoteDetailsFragment" >
+        android:label="NoteDetailsFragment">
         <action
             android:id="@+id/action_noteDetailsFragment_to_editNoteFragment"
-            app:destination="@id/editNoteFragment" />
+            app:destination="@id/editNoteFragment"
+            app:popUpTo="@id/notesFragment" />
     </fragment>
     <fragment
         android:id="@+id/editNoteFragment"
         android:name="com.example.mynotesapp.ui.EditNoteFragment"
         android:label="fragment_edit_note"
         tools:layout="@layout/fragment_edit_note" />
+    <fragment
+        android:id="@+id/myBottomSheetFragment"
+        android:name="com.example.mynotesapp.ui.MyBottomSheetFragment"
+        android:label="fragment_my_bottom_sheet"
+        tools:layout="@layout/fragment_my_bottom_sheet" />
+    <fragment
+        android:id="@+id/authFragment"
+        android:name="com.example.mynotesapp.ui.auth.AuthFragment"
+        android:label="auth_fragment"
+        tools:layout="@layout/fragment_auth">
+        <action
+            android:id="@+id/action_authFragment_to_notesFragment"
+            app:destination="@id/notesFragment"
+            app:popUpTo="@id/startScreenFragment" />
+    </fragment>
+
 </navigation>

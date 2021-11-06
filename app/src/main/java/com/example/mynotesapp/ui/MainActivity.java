@@ -9,6 +9,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -37,10 +39,17 @@ public class MainActivity extends AppCompatActivity {
 
     private FragmentManager fragmentManager;
 
+    private NavHostFragment navHostFragment;
+
+    private NavController navCo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        navCo = navHostFragment.getNavController();
 
         fragmentManager = getSupportFragmentManager();
 
@@ -62,12 +71,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         isLand = getResources().getBoolean(R.bool.is_landscape);
-
-        if (savedInstanceState == null) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, stFr)
-                    .commit();
-        }
 
         initToolbarAndDrawer();
 
@@ -140,17 +143,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openNoteList() {
-        if (isLand) {
-            removeInPrimContIfNotEmpty();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container_left, notesFr)
-                    .commit();
-        } else {
-            fragmentManager.beginTransaction()
-                    .addToBackStack(null)
-                    .replace(R.id.fragment_container, notesFr)
-                    .commit();
-        }
+
+        navCo.navigate(R.id.action_startScreenFragment_to_authFragment);
     }
 
     private void removeInPrimContIfNotEmpty() {
@@ -204,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+
         if (isLand) {
             if (fragmentManager.findFragmentById(R.id.fragment_container) == null &&
                     fragmentManager.findFragmentById(R.id.fragment_container_right) == null) {
@@ -217,7 +212,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
-
     }
 
     public void showAlertOnExitDialog() {

@@ -24,6 +24,13 @@ import android.widget.Toast;
 import com.example.mynotesapp.R;
 import com.example.mynotesapp.domain.Note;
 import com.example.mynotesapp.storage.CreatedNotesRepository;
+import com.example.mynotesapp.storage.FireStoreNotesRepository;
+import com.example.mynotesapp.storage.SharedPrefNoteRepository;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Collections;
 import java.util.List;
@@ -50,7 +57,7 @@ public class NotesFragment extends Fragment implements NotesListView {
 
     private Button tryAgainButton;
 
-    private Note selectedNoteDetails;
+    private int nameCount = 0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,7 +65,7 @@ public class NotesFragment extends Fragment implements NotesListView {
 
         setHasOptionsMenu(true);
 
-        presenter = new NotesListPresenter(this, new CreatedNotesRepository());
+        presenter = new NotesListPresenter(this, new FireStoreNotesRepository());
 
         adapter = new NotesAdapter(this);
         adapter.setNoteClicked(new NotesAdapter.OnNoteClicked() {
@@ -237,16 +244,17 @@ public class NotesFragment extends Fragment implements NotesListView {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 presenter.removeAll();
+                nameCount = 0;
                 return false;
             }
         });
-
         MenuItem add = menu.findItem(R.id.action_add);
         add.setVisible(true);
         add.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                presenter.add("New note", "Note content");
+                nameCount++;
+                presenter.add("New note " + nameCount, "Note content");
                 return false;
             }
         });
