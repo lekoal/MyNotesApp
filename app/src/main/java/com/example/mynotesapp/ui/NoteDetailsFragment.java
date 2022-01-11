@@ -29,22 +29,23 @@ public class NoteDetailsFragment extends Fragment {
 
     private static final String ARG_NOTE = "ARG_NOTE";
 
-    public static final String KEY_NOTES_LIST_DETAILS = "KEY_NOTES_LIST_DETAILS";
+    public static final String ARG_NOTE_FOR_DELETE = "ARG_NOTE_FOR_DELETE";
+    public static final String DELETE_RESULT = "DELETE_RESULT";
 
     private String newDate;
     private int selectedYear = 2021;
     private int selectedMonth = 10;
     private int selectedDayOfMonth = 18;
 
-    FragmentManager fragmentManager;
+    private FragmentManager fragmentManager;
 
-    EditNoteFragment editNoteFragment;
+    private EditNoteFragment editNoteFragment;
 
     private Button editContent;
 
     private boolean isLand;
 
-    Note selectedNote;
+    private Note selectedNote;
 
     public static NoteDetailsFragment newInstance(Note note) {
         Bundle args = new Bundle();
@@ -83,7 +84,7 @@ public class NoteDetailsFragment extends Fragment {
             noteTime.setText(selectedNote.getTime());
             noteContent.setText(selectedNote.getContent());
 
-            editNoteFragment = new EditNoteFragment(selectedNote);
+            editNoteFragment = EditNoteFragment.newInstance(selectedNote);
         }
 
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -113,17 +114,26 @@ public class NoteDetailsFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                    if (isLand) {
-                        removeInPrimContIfNotEmpty();
-                        fragmentManager.beginTransaction()
-                                .replace(R.id.fragment_container_right, editNoteFragment)
-                                .commit();
-                    } else {
-                        fragmentManager.beginTransaction()
-                                .addToBackStack(null)
-                                .replace(R.id.fragment_container, editNoteFragment)
-                                .commit();
+                if (isLand) {
+                    removeInPrimContIfNotEmpty();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container_right, editNoteFragment)
+                            .commit();
+                } else {
+                    fragmentManager.beginTransaction()
+                            .addToBackStack(null)
+                            .replace(R.id.fragment_container, editNoteFragment)
+                            .commit();
                 }
+            }
+        });
+
+        Button deleteNote = view.findViewById(R.id.delete_note);
+
+        deleteNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(requireContext(), "Delete key is  pressed", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 public class Note implements Parcelable {
     private String title;
@@ -15,7 +16,6 @@ public class Note implements Parcelable {
     private String id;
 
     public Note(String id, String title, String content) {
-        this.id = id;
         this.title = title;
         this.content = content;
         Date dateNow = new Date();
@@ -23,14 +23,15 @@ public class Note implements Parcelable {
         SimpleDateFormat formatForTimeNow = new SimpleDateFormat("hh:mm:ss", Locale.US);
         this.date = formatForDateNow.format(dateNow);
         this.time = formatForTimeNow.format(dateNow);
+        this.id = id;
     }
 
     protected Note(Parcel in) {
-        id = in.readString();
         title = in.readString();
         content = in.readString();
         date = in.readString();
         time = in.readString();
+        id = in.readString();
     }
 
     public static final Creator<Note> CREATOR = new Creator<Note>() {
@@ -77,6 +78,7 @@ public class Note implements Parcelable {
         return id;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -84,10 +86,23 @@ public class Note implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(id);
         parcel.writeString(title);
         parcel.writeString(content);
         parcel.writeString(date);
         parcel.writeString(time);
+        parcel.writeString(id);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Note note = (Note) o;
+        return Objects.equals(title, note.title) && Objects.equals(content, note.content) && Objects.equals(date, note.date) && Objects.equals(time, note.time);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, content, date, time);
     }
 }

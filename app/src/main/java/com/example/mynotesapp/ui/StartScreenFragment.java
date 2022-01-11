@@ -1,32 +1,25 @@
 package com.example.mynotesapp.ui;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.Context;
-import android.os.Build;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentResultListener;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.DatePicker;
 
 import com.example.mynotesapp.R;
-import com.example.mynotesapp.domain.Note;
-import com.google.android.material.snackbar.Snackbar;
 
+import java.util.Calendar;
 import java.util.Objects;
 
 public class StartScreenFragment extends Fragment implements View.OnClickListener {
@@ -39,6 +32,12 @@ public class StartScreenFragment extends Fragment implements View.OnClickListene
 
     private static final String CHANNEL_ID = "CHANNEL_ID";
 
+    private int selectedYear = Calendar.getInstance().get(Calendar.YEAR);;
+    private int selectedMonth = Calendar.getInstance().get(Calendar.MONTH);;
+    private int selectedDayOfMonth = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);;
+
+    private DatePickerDialog datePickerDialog;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -50,16 +49,25 @@ public class StartScreenFragment extends Fragment implements View.OnClickListene
         super.onViewCreated(view, savedInstanceState);
 
         Button showNotesList = view.findViewById(R.id.view_list_notes);
-        Button newNote = view.findViewById(R.id.add_note);
         Button settings = view.findViewById(R.id.settings);
         Button aboutApp = view.findViewById(R.id.about_app);
         Button showNotification = view.findViewById(R.id.show_notification);
+        Button showCalendar = view.findViewById(R.id.show_calendar);
+
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+
+            }
+        };
+
+        datePickerDialog = new DatePickerDialog(this.getContext(), dateSetListener, selectedYear, selectedMonth, selectedDayOfMonth);
 
         showNotesList.setOnClickListener(this);
-        newNote.setOnClickListener(view1 -> showSnackBar());
         settings.setOnClickListener(view1 -> showBottomSheet());
         aboutApp.setOnClickListener(this);
         showNotification.setOnClickListener(view1 -> showNotification());
+        showCalendar.setOnClickListener(view1 -> showCalendar());
 
         notesFr = new NotesFragment();
 
@@ -101,21 +109,6 @@ public class StartScreenFragment extends Fragment implements View.OnClickListene
         }
     }
 
-    private void showSnackBar() {
-        Snackbar.make(requireActivity().findViewById(R.id.add_note), getString(R.string.add_note_message), Snackbar.LENGTH_INDEFINITE)
-                .setAction("OK", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        showToast();
-                    }
-                })
-                .show();
-    }
-
-    private void showToast() {
-        Toast.makeText(getActivity(), getString(R.string.new_note_message), Toast.LENGTH_SHORT).show();
-    }
-
     private void showBottomSheet() {
         new MyBottomSheetFragment().show(getParentFragmentManager(), MyBottomSheetFragment.TAG);
     }
@@ -139,5 +132,9 @@ public class StartScreenFragment extends Fragment implements View.OnClickListene
                 .setDescription(descriptionText);
 
         notificationManager.createNotificationChannel(channel.build());
+    }
+
+    private void showCalendar() {
+        datePickerDialog.show();
     }
 }

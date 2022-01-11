@@ -10,18 +10,22 @@ import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mynotesapp.R;
 import com.example.mynotesapp.domain.Note;
 import com.example.mynotesapp.storage.CreatedNotesRepository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,19 +42,25 @@ public class NotesFragment extends Fragment implements NotesListView {
 
     private Note selectedNote;
 
+    private Note selectedNoteContext;
+
     private NotesAdapter adapter;
 
     private ProgressBar progressBar;
 
     private Button tryAgainButton;
 
+    private Note selectedNoteDetails;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setHasOptionsMenu(true);
+
         presenter = new NotesListPresenter(this, new CreatedNotesRepository());
 
-        adapter = new NotesAdapter();
+        adapter = new NotesAdapter(this);
         adapter.setNoteClicked(new NotesAdapter.OnNoteClicked() {
             @Override
             public void onNoteClicked(Note note) {
@@ -58,6 +68,12 @@ public class NotesFragment extends Fragment implements NotesListView {
                 bundle.putParcelable(ARG_NOTE, note);
 
                 getParentFragmentManager().setFragmentResult(KEY_NOTES_LIST_ACTIVITY, bundle);
+            }
+
+            @Override
+            public void onNoteLongClicked(View itemView, Note note) {
+                itemView.showContextMenu();
+                selectedNoteContext = note;
             }
         });
     }
@@ -143,6 +159,19 @@ public class NotesFragment extends Fragment implements NotesListView {
                 }
             }
         });
+
+        getParentFragmentManager().setFragmentResultListener(EditNoteFragment.KEY_RESULT, getViewLifecycleOwner(), new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+
+                String title = result.getString(EditNoteFragment.ARG_TITLE);
+                String content = result.getString(EditNoteFragment.ARG_CONTENT);
+                String id = result.getString(EditNoteFragment.ARG_ID);
+
+                presenter.update(id, title, content, selectedNoteContext);
+
+            }
+        });
     }
 
     @Override
@@ -166,6 +195,18 @@ public class NotesFragment extends Fragment implements NotesListView {
     }
 
     @Override
+    public void clearNotes() {
+        adapter.setNotes(Collections.emptyList());
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void addNote(Note result) {
+        adapter.addNote(result);
+        adapter.notifyItemInserted(adapter.getItemCount() - 1);
+    }
+
+    @Override
     public void showNotes(List<Note> notes) {
         adapter.setNotes(notes);
         adapter.notifyDataSetChanged();
@@ -186,5 +227,77 @@ public class NotesFragment extends Fragment implements NotesListView {
                     .remove(Objects.requireNonNull(fragmentManager.findFragmentById(R.id.fragment_container)))
                     .commit();
         }
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        MenuItem clear = menu.findItem(R.id.action_clear);
+        clear.setVisible(true);
+        clear.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                presenter.removeAll();
+                return false;
+            }
+        });
+
+        MenuItem add = menu.findItem(R.id.action_add);
+        add.setVisible(true);
+        add.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                presenter.add("New note", "Note content");
+                return false;
+            }
+        });
+        super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        requireActivity().getMenuInflater().inflate(R.menu.notes_list_menu_comtext, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.edit_note_context) {
+            EditNoteFragment editNoteFragment = EditNoteFragment.newInstance(selectedNoteContext);
+
+            if (isLand) {
+                removeInPrimContIfNotEmpty();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container_right, editNoteFragment)
+                        .commit();
+            } else {
+                fragmentManager.beginTransaction()
+                        .addToBackStack(null)
+                        .replace(R.id.fragment_container, editNoteFragment)
+                        .commit();
+            }
+
+            Toast.makeText(requireContext(), "Edit " + selectedNoteContext.getTitle(), Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (item.getItemId() == R.id.delete_note_context) {
+            presenter.delete(selectedNoteContext);
+            Toast.makeText(requireContext(), "Delete " + selectedNoteContext.getTitle(), Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    @Override
+    public void deleteNote(Note selectedNoteContext) {
+        int notePosition = adapter.deleteNote(selectedNoteContext);
+
+        adapter.notifyItemRemoved(notePosition);
+    }
+
+    @Override
+    public void updateNote(Note result) {
+        int notePosition = adapter.updateNote(result);
+
+        adapter.notifyItemChanged(notePosition);
     }
 }

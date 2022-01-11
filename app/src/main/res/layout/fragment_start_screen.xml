@@ -21,13 +21,6 @@
         android:text="@string/list_of_notes" />
 
     <Button
-        android:id="@+id/add_note"
-        android:layout_width="@dimen/start_button_width"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/start_screen_button_v_margin"
-        android:text="@string/new_note" />
-
-    <Button
         android:id="@+id/settings"
         android:layout_width="@dimen/start_button_width"
         android:layout_height="wrap_content"
@@ -47,5 +40,12 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/start_screen_button_v_margin"
         android:text="@string/show_notification" />
+
+    <Button
+        android:id="@+id/show_calendar"
+        android:layout_width="@dimen/start_button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/start_screen_button_v_margin"
+        android:text="@string/show_calendar" />
 
 </LinearLayout>

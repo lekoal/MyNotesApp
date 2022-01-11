@@ -15,4 +15,12 @@ public interface NotesListView {
     void hideTryAgainButton();
 
     void showTryAgainButton();
+
+    void clearNotes();
+
+    void addNote(Note result);
+
+    void deleteNote(Note selectedNoteContext);
+
+    void updateNote(Note result);
 }
